@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>DarkWoodsRL</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SadConsole.Host.MonoGame" Version="9.2.0" />
+        <PackageReference Include="TheSadRogue.Integration" Version="1.0.0-beta01" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Fonts\Andux2x.font">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Fonts\Andux16x24.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

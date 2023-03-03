@@ -1,0 +1,9 @@
+{
+  "$type": "SadConsole.SadFont, SadConsole",
+  "FilePath": "Andux16x24.png",
+  "GlyphHeight": 24,
+  "GlyphPadding": 0,
+  "GlyphWidth": 16,
+  "Name": "Andux2x",
+  "SolidGlyphIndex": 219
+}
