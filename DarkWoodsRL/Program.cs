@@ -1,4 +1,5 @@
-﻿using DarkWoodsRL.Screens;
+﻿using DarkWoodsRL.Audio;
+using DarkWoodsRL.Screens;
 using SadConsole;
 using SadRogue.Integration;
 
@@ -7,8 +8,8 @@ namespace DarkWoodsRL;
 internal static class Engine
 {
     // Window width/height
-    public const int ScreenWidth = 80;
-    public const int ScreenHeight = 40;
+    public const int ScreenWidth = 60;
+    public const int ScreenHeight = 30;
 
     public static MainGame GameScreen;
 
@@ -25,6 +26,7 @@ internal static class Engine
 
     private static void Init()
     {
+        SoundSystem.Init();
         // Main menu
         GameHost.Instance.Screen = new MainMenu();
 

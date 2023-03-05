@@ -21,14 +21,14 @@ internal class ListItem
 /// <summary>
 /// Menu used by the player to select a consumable from their inventory to use.
 /// </summary>
-internal class ConsumableSelect : MainGameMenu
+internal class InventoryScreen : MainGameMenu
 {
     private readonly Inventory _playerInventory;
 
-    public ConsumableSelect()
+    public InventoryScreen()
         : base(51, 15)
     {
-        Title = "Select an item to consume:";
+        Title = "Inventory";
 
         _playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
         if (_playerInventory.Items.Count == 0)

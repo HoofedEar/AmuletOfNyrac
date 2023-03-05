@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.Themes;
+using GoRogue.GameFramework;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 
@@ -12,7 +14,7 @@ namespace DarkWoodsRL.MapObjects.Components;
 /// </summary>
 internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 {
-    public int Capacity { get; }
+    private int Capacity { get; }
 
     public readonly List<RogueLikeEntity> Items;
 
@@ -79,13 +81,46 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             if (isPlayer)
                 Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.",
                     MessageColors.ItemPickedUpAppearance));
-
-            // TODO: Not great place for this
-            //TakeEnemyTurns(Engine.Player.CurrentMap!);
+            
             return true;
         }
         if (isPlayer)
             Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
+        return false;
+    }
+
+    public bool Descend()
+    {
+        if (Parent == null)
+            throw new InvalidOperationException(
+                "Can't pick up an item into an inventory that's not connected to an object.");
+
+        if (Parent.CurrentMap == null)
+            throw new InvalidOperationException("Entity must be part of a map to pick up items.");
+
+        var isPlayer = Parent == Engine.Player;
+        
+        if (Parent.CurrentMap.GetEntitiesAt<RogueLikeEntity>(Parent.Position).Any(item => item is {Appearance.Glyph: 240}))
+        {
+            if (!isPlayer) return true;
+            Engine.GameScreen?.MessageLog.AddMessage(new($"You descend the stairs.",
+                MessageColors.ItemPickedUpAppearance));
+            // Generate a dungeon map, spawn enemies, and note player spawn location
+            var (map, playerSpawn) = Maps.Factory.Dungeon();
+
+            // Set GameScreen's map to the new one and spawn the player in appropriately
+            Engine.GameScreen?.SetMap(map, playerSpawn);
+
+            // Calculate initial FOV for player on this new map
+            Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
+            Maps.Factory.CurrentFloor += 1;
+
+
+            return true;
+        }
+        
+        if (isPlayer)
+            Engine.GameScreen?.MessageLog.AddMessage(new("There are no stairs to descend here.", MessageColors.ImpossibleActionAppearance));
         return false;
     }
 
@@ -98,11 +133,11 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             throw new InvalidOperationException("Cannot consume item from an inventory not attached to an object.");
         var consumable = item.AllComponents.GetFirst<IConsumable>();
 
-        int idx = Items.FindIndex(i => i == item);
+        var idx = Items.FindIndex(i => i == item);
         if (idx == -1)
             throw new ArgumentException("Tried to consume a consumable that was not in the inventory.");
 
-        bool result = consumable.Consume(Parent);
+        var result = consumable.Consume(Parent);
         if (!result) return false;
 
         Items.RemoveAt(idx);

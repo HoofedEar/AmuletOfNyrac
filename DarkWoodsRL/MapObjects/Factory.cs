@@ -34,8 +34,8 @@ internal static class Factory
         {
             "Wall",
             new TerrainAppearanceDefinition(
-                new ColoredGlyph(Color.Ivory, Color.Black, 176),
-                new ColoredGlyph(Color.Gray, Color.Black, 176)
+                new ColoredGlyph(Color.Ivory, Color.Black, 177),
+                new ColoredGlyph(Color.Gray, Color.Black, 177)
             )
         },
     };
@@ -49,7 +49,7 @@ internal static class Factory
     public static RogueLikeEntity Player()
     {
         // Create entity with appropriate attributes
-        var player = new RogueLikeEntity(Color.Yellow, Color.Black,1, false, layer: (int) GameMap.Layer.Monsters)
+        var player = new RogueLikeEntity(Color.Yellow, Color.Black, 1, false, layer: (int) GameMap.Layer.Monsters)
         {
             Name = "Player"
         };
@@ -60,30 +60,21 @@ internal static class Factory
         motionControl.SetMotions(PlayerKeybindingsComponent.NumPadAllMotions);
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
-        motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift), () =>
-        {
-            // Generate a dungeon map, spawn enemies, and note player spawn location
-            var (map, playerSpawn) = Maps.Factory.Dungeon();
-
-            // Set GameScreen's map to the new one and spawn the player in appropriately
-            Engine.GameScreen?.SetMap(map, playerSpawn);
-
-            // Calculate initial FOV for player on this new map
-            Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
-        });
-        
-        player.AllComponents.Add(motionControl);
+        motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift),
+            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().Descend()));
 
         // Add controls for picking up items and getting to inventory screen.
         motionControl.SetAction(Keys.OemComma,
             () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
-        motionControl.SetAction(Keys.C, () => Game.Instance.Screen.Children.Add(new ConsumableSelect()));
+        motionControl.SetAction(Keys.I, () => Game.Instance.Screen.Children.Add(new InventoryScreen()));
+
+        player.AllComponents.Add(motionControl);
 
         // Add component for updating map's player FOV as they move
         player.AllComponents.Add(new PlayerFOVController {FOVRadius = 6});
 
         // Player combatant
-        player.AllComponents.Add(new Combatant(30, 2, 5));
+        player.AllComponents.Add(new Combatant(30, 2, 5, 10));
 
         // Player inventory
         player.AllComponents.Add(new Inventory(26));
@@ -107,7 +98,8 @@ internal static class Factory
 
     public static RogueLikeEntity Troll()
     {
-        var enemy = new RogueLikeEntity(MainPalette.LightGray, Color.Black, 'T', false, layer: (int) GameMap.Layer.Monsters)
+        var enemy = new RogueLikeEntity(MainPalette.LightGray, Color.Black, 'T', false,
+            layer: (int) GameMap.Layer.Monsters)
         {
             Name = "Troll"
         };

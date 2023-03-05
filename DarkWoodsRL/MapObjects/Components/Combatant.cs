@@ -1,8 +1,10 @@
 ﻿using System;
+using DarkWoodsRL.Audio;
 using DarkWoodsRL.Themes;
 using GoRogue.DiceNotation;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
+using SandsOfDelirium.Helpers.Audio;
 
 namespace DarkWoodsRL.MapObjects.Components;
 
@@ -111,15 +113,14 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     /// 20 - the attackers level - the defenders armor. If the attack is greater or equal to the defense, the attack succeeded.
     /// </summary>
     /// <param name="target"></param>
-    public void Attack(Combatant target)
+    private void Attack(Combatant target)
     {
-        // TODO Combat math
         var roll = Dice.Roll("1d20");
-        var result = roll + DEX;
+        var result = Parent == Engine.Player ? roll + DEX + 2 : roll + DEX;
         var atkTextColor = Parent == Engine.Player
             ? MessageColors.PlayerAtkAppearance
             : MessageColors.EnemyAtkAtkAppearance;
-        string attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
+        var attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
         
         if (result <= Dice.Roll("1d20") + target.Endurance)
         {
@@ -128,10 +129,13 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         }
         
         // Successful hit
-        int damage = Strength - target.Endurance;
+        var damage = Strength - target.Endurance;
+        var atkSound = Parent == Engine.Player ? Sounds.HitA : Sounds.HitB;
         if (damage > 0)
         {
             Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor));
+            var sound = new SoundSystem();
+            sound.Play(atkSound);
             target.HP -= damage;
         }
         else

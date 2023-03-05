@@ -1,6 +1,7 @@
 ﻿using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.Maps;
 using SadRogue.Integration;
+using SadRogue.Integration.FieldOfView.Memory;
 using SadRogue.Primitives;
 
 namespace DarkWoodsRL.MapObjects.Items;
@@ -19,5 +20,16 @@ internal static class Factory
         potion.AllComponents.Add(new HealingConsumable(4));
 
         return potion;
+    }
+
+    // TODO Add functionality to make position remembered when seen
+    public static RogueLikeEntity Stairs()
+    {
+        var stairs = new RogueLikeEntity(Color.Cyan, Color.Black, 240, layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Stairs"
+        };
+        
+        return stairs;
     }
 }

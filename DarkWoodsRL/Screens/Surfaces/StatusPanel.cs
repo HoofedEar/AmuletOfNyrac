@@ -30,6 +30,24 @@ internal class StatusPanel : ControlsConsole
         Controls.Add(HPBar);
         Engine.Player.AllComponents.GetFirst<Combatant>().HPChanged += OnPlayerHPChanged;
         UpdateHPBar();
+
+        var strength = new Label("STR 10")
+        {
+            Position = (1, 1)
+        };
+        Controls.Add(strength);
+        
+        var dexterity = new Label("DEX 10")
+        {
+            Position = (1, 2)
+        };
+        Controls.Add(dexterity);
+        
+        var endurance = new Label("END 10")
+        {
+            Position = (1, 3)
+        };
+        Controls.Add(endurance);
     }
 
     private void OnPlayerHPChanged(object? sender, EventArgs e)

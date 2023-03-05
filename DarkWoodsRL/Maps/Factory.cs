@@ -1,4 +1,8 @@
-﻿using GoRogue.MapGeneration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DarkWoodsRL.MapObjects;
+using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
 using SadRogue.Primitives;
@@ -19,13 +23,17 @@ internal static class Factory
     private const int MaxMonstersPerRoom = 2;
     private const int MaxPotionsPerRoom = 2;
 
+    public static int CurrentFloor = 0;
+    public static List<GameMap> Floors;
+
     public static (GameMap map, Point playerSpawn) Dungeon()
     {
         // Generate a dungeon maze map
         var generator = new Generator(60, 30)
             .ConfigAndGenerateSafe(gen =>
             {
-                gen.AddSteps(DefaultAlgorithms.BasicRandomRoomsMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 8, roomMaxSize: 10));
+                gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 6,
+                    roomMaxSize: 12, saveDeadEndChance: 0));
             });
 
         // Extract components from the map GoRogue generated which hold basic information about the map
@@ -37,14 +45,18 @@ internal static class Factory
         map.AllComponents.Add(new TerrainFOVVisibilityHandler());
 
         // Translate GoRogue's terrain data into actual integration library objects.
-        map.ApplyTerrainOverlay(generatedMap, (pos, val) => val ? MapObjects.Factory.Floor(pos) : MapObjects.Factory.Wall(pos));
+        map.ApplyTerrainOverlay(generatedMap,
+            (pos, val) => val ? MapObjects.Factory.Floor(pos) : MapObjects.Factory.Wall(pos));
 
         // Set player spawn
         var playerSpawn = GetPlayerSpawn(rooms);
 
+        UpdateTerrain(map);
+
         // Spawn enemies/items/etc
         SpawnMonsters(map, rooms, playerSpawn);
         SpawnPotions(map, rooms, playerSpawn);
+        SpawnStairs(map, rooms, playerSpawn);
 
         return (map, playerSpawn);
     }
@@ -67,7 +79,8 @@ internal static class Factory
                 bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
 
                 var enemy = isOrc ? MapObjects.Factory.Orc() : MapObjects.Factory.Troll();
-                enemy.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                enemy.Position =
+                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                 map.AddEntity(enemy);
             }
         }
@@ -82,9 +95,48 @@ internal static class Factory
             for (int i = 0; i < potions; i++)
             {
                 var potion = MapObjects.Items.Factory.HealthPotion();
-                potion.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                potion.Position =
+                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                 map.AddEntity(potion);
             }
+        }
+    }
+
+    private static void SpawnStairs(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
+    {
+        // Generate at least one set of stairs
+        var last = rooms.Items[^1];
+        foreach (var room in rooms.Items)
+        {
+            var chance = GlobalRandom.DefaultRNG.NextInt(0, 10);
+            if (chance < 8 & room != last) continue;
+
+            var stairs = MapObjects.Items.Factory.Stairs();
+            stairs.Position =
+                GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+            map.AddEntity(stairs);
+        }
+    }
+
+    private static void UpdateTerrain(GameMap map)
+    {
+        foreach (var t in map.Terrain.Positions())
+        {
+            var obj = map.GetTerrainAt<Terrain>(t);
+            if (obj == null) continue;
+
+            var x = obj.Position.X;
+            var y = obj.Position.Y;
+
+            var pos = new Point(x, y);
+            var belowPos = pos + Direction.Down;
+            if (belowPos.Y > 29) continue;
+
+            var below = map.GetTerrainAt<Terrain>(belowPos);
+            if (below is not {Appearance.Glyph: 46} || obj is not {Appearance.Glyph: 177}) continue;
+            obj.DarkAppearance.Glyph = 128;
+            obj.Appearance.Glyph = 128;
+            obj.TrueAppearance.CopyAppearanceFrom(obj.Appearance);
         }
     }
 }
