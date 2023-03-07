@@ -11,18 +11,18 @@ using SadRogue.Primitives;
 
 namespace DarkWoodsRL.MapObjects;
 
-internal readonly record struct TerrainAppearanceDefinition(ColoredGlyph Light, ColoredGlyph Dark);
+public readonly record struct TerrainAppearanceDefinition(ColoredGlyph Light, ColoredGlyph Dark);
 
 /// <summary>
 /// Simple class with some static functions for creating map objects.
 /// </summary>
-internal static class Factory
+public static class Factory
 {
     /// <summary>
     /// Appearance definitions for various types of terrain objects.  It defines both their normal color, and their
     /// "explored but out of FOV" color.
     /// </summary>
-    private static readonly Dictionary<string, TerrainAppearanceDefinition> AppearanceDefinitions = new()
+    public static readonly Dictionary<string, TerrainAppearanceDefinition> AppearanceDefinitions = new()
     {
         {
             "Floor",
@@ -61,7 +61,7 @@ internal static class Factory
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
         motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift),
-            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().Descend()));
+            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<LevelHandler>().Descend()));
 
         // Add controls for picking up items and getting to inventory screen.
         motionControl.SetAction(Keys.OemComma,
@@ -78,6 +78,8 @@ internal static class Factory
 
         // Player inventory
         player.AllComponents.Add(new Inventory(26));
+        player.AllComponents.Add(new LevelHandler());
+
 
         return player;
     }
@@ -110,15 +112,4 @@ internal static class Factory
 
         return enemy;
     }
-
-    public static RogueLikeEntity Corpse(RogueLikeEntity entity)
-        => new(entity.Appearance, layer: (int) GameMap.Layer.Items)
-        {
-            Name = $"Corpse - {entity.Name}",
-            Position = entity.Position,
-            Appearance =
-            {
-                Glyph = '%'
-            }
-        };
 }

@@ -1,5 +1,8 @@
-﻿using DarkWoodsRL.MapObjects.Components;
+﻿using System.Threading.Tasks;
+using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Items;
+using DarkWoodsRL.MapObjects.Components.Items.Armor;
+using DarkWoodsRL.MapObjects.Components.Items.Weapon;
 using SadConsole.UI.Controls;
 using SadRogue.Integration;
 
@@ -26,34 +29,26 @@ internal class InventoryScreen : MainGameMenu
     private readonly Inventory _playerInventory;
 
     public InventoryScreen()
-        : base(51, 15)
+        : base(30, 15)
     {
         Title = "Inventory";
 
         _playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
         if (_playerInventory.Items.Count == 0)
         {
-            PrintTextAtCenter("There are no items in your inventory.");
+            PrintTextAtCenter("No items in your inventory.");
             return;
         }
 
         // Find any consumable items and add them to a ListBox
-        bool foundItem = false;
-        var list = new ListBox(Width - 2, Height - 2) { Position = (1, 1), SingleClickItemExecute = true };
+        var list = new ListBox(Width - 2, Height - 2) {Position = (1, 1), SingleClickItemExecute = true};
 
         foreach (var item in _playerInventory.Items)
         {
-            var consumable = item.AllComponents.GetFirstOrDefault<IConsumable>();
-            if (consumable == null) continue;
-
-            foundItem = true;
-            list.Items.Add(new ListItem { Item = item });
+            list.Items.Add(new ListItem {Item = item});
         }
 
-        if (!foundItem)
-            PrintTextAtCenter("There are no consumable items in your inventory.");
-        else
-            Controls.Add(list);
+        Controls.Add(list);
 
         // Handle when an item is selected by using it.
         list.SelectedItemExecuted += OnItemSelected;
@@ -61,9 +56,12 @@ internal class InventoryScreen : MainGameMenu
 
     private void OnItemSelected(object? sender, ListBox.SelectedItemEventArgs e)
     {
-        Hide();
-
-        var item = ((ListItem)e.Item).Item;
-        PlayerActionHelper.PlayerTakeAction(_ => _playerInventory.Consume(item));
+        Engine.DetailScreenAction = 0;
+        var item = ((ListItem) e.Item).Item;
+        var type = 0;
+        if (item.AllComponents.Contains<IArmor>() || item.AllComponents.Contains<IWeapon>())
+            type = 1;
+        var desc = new DetailScreen(item, type);
+        desc.Show();
     }
 }

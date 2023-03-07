@@ -21,10 +21,10 @@ namespace DarkWoodsRL.Maps;
 internal static class Factory
 {
     private const int MaxMonstersPerRoom = 2;
-    private const int MaxPotionsPerRoom = 2;
+    private const int MaxPotionsPerRoom = 4;
 
-    public static int CurrentFloor = 0;
-    public static List<GameMap> Floors;
+    public static int CurrentDungeonLevel = 0;
+    public static bool[] AmuletsFound = {false, false, false, false};
 
     public static (GameMap map, Point playerSpawn) Dungeon()
     {
@@ -57,6 +57,18 @@ internal static class Factory
         SpawnMonsters(map, rooms, playerSpawn);
         SpawnPotions(map, rooms, playerSpawn);
         SpawnStairs(map, rooms, playerSpawn);
+
+        switch (CurrentDungeonLevel)
+        {
+            // If we are on level 5 or deeper, and we don't have the Pearl Amulet, spawn it.
+            case >= 5 when AmuletsFound[0] == false:
+                // Spawn Pearl Amulet
+                break;
+            // If we are on level 10 or deeper, and we have the Pearl Amulet, but don't have the Emerald Amulet, spawn it.
+            case >= 10 when AmuletsFound[1] == false && AmuletsFound[0]:
+                // And so on
+                break;
+        }
 
         return (map, playerSpawn);
     }
@@ -94,27 +106,51 @@ internal static class Factory
             int potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
             for (int i = 0; i < potions; i++)
             {
-                var potion = MapObjects.Items.Factory.HealthPotion();
-                potion.Position =
-                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                map.AddEntity(potion);
+                var type = GlobalRandom.DefaultRNG.NextInt(0, 3);
+                switch (type)
+                {
+                    case 0:
+                    {
+                        var potion = MapObjects.Items.Factory.HealthPotion();
+                        potion.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(potion);
+                        break;
+                    }
+                    case 1:
+                    {
+                        var armor = MapObjects.Items.Factory.LeatherArmor();
+                        armor.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(armor);
+                        break;
+                    }
+                    case 2:
+                    {
+                        var weapon = MapObjects.Items.Factory.Dagger();
+                        weapon.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(weapon);
+                        break;
+                    }
+                }
             }
         }
     }
 
     private static void SpawnStairs(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
     {
-        // Generate at least one set of stairs
         var last = rooms.Items[^1];
         foreach (var room in rooms.Items)
         {
-            var chance = GlobalRandom.DefaultRNG.NextInt(0, 10);
-            if (chance < 8 & room != last) continue;
-
-            var stairs = MapObjects.Items.Factory.Stairs();
-            stairs.Position =
+            if (room != last) continue;
+            var pos =
                 GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-            map.AddEntity(stairs);
+            var floorTerrain = map.GetTerrainAt<Terrain>(pos);
+            if (floorTerrain == null) continue;
+            floorTerrain.Appearance.Glyph = 240;
+            floorTerrain.Appearance.Foreground = Color.Cyan;
+            floorTerrain.TrueAppearance.CopyAppearanceFrom(floorTerrain.Appearance);
         }
     }
 

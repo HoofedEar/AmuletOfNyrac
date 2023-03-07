@@ -116,6 +116,6 @@ public class GameMap : RogueLikeMap
         // Switch entity for corpse
         var map = hostile.CurrentMap!;
         map.RemoveEntity(hostile);
-        map.AddEntity(MapObjects.Factory.Corpse(hostile));
+        // map.AddEntity(MapObjects.Factory.Corpse(hostile));
     }
 }

@@ -2,6 +2,7 @@ using System;
 using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.Maps;
 using SadRogue.Integration;
+using SadRogue.Primitives;
 
 namespace DarkWoodsRL;
 
@@ -18,7 +19,8 @@ internal static class PlayerActionHelper
     /// take place.
     /// </summary>
     /// <param name="action">Action to be performed.  Takes the entity performing the action (the player in this case) as a parameter.</param>
-    public static void PlayerTakeAction(Func<RogueLikeEntity, bool> action) => PlayerTakeAction((entity, _) => action(entity), false);
+    public static void PlayerTakeAction(Func<RogueLikeEntity, bool> action) =>
+        PlayerTakeAction((entity, _) => action(entity), false);
 
     /// <summary>
     /// Causes the player to attempt to take the given action as a turn.  If the action succeeds, the player's turn will end and enemy's turns will
@@ -33,8 +35,8 @@ internal static class PlayerActionHelper
         if (!action(Engine.Player, performParams))
             return;
 
-        // The player completed their turn by successfully taking an action; but if they somehow died in the process, we'll just return
-        // because the Engine's death handlers will be dealing with the situation.
+        // The player completed their turn by successfully taking an action; but if they somehow died in the process,
+        // we'll just return because the Engine's death handlers will be dealing with the situation.
         if (Engine.Player.AllComponents.GetFirst<Combatant>().HP <= 0) return;
 
         // Otherwise, have the enemies take their turns.

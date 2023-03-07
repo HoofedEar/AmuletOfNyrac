@@ -7,7 +7,7 @@ namespace DarkWoodsRL.Screens.MainGameMenus;
 /// <summary>
 /// A Window that can be used as a modal menu over the game screen by adding it as a child to the MainGameScreen.
 /// </summary>
-internal class MainGameMenu : Window
+public class MainGameMenu : Window
 {
     public MainGameMenu(int width, int height)
         : base(width, height)

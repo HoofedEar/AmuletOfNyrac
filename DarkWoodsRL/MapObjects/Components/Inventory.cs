@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using DarkWoodsRL.MapObjects.Components.Items;
+using DarkWoodsRL.MapObjects.Components.Items.Armor;
+using DarkWoodsRL.MapObjects.Components.Items.Weapon;
 using DarkWoodsRL.Themes;
-using GoRogue.GameFramework;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 
@@ -44,7 +45,8 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         Parent.CurrentMap.AddEntity(item);
 
         if (Parent == Engine.Player)
-            Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.", MessageColors.ItemDroppedAppearance));
+            Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.",
+                MessageColors.ItemDroppedAppearance));
     }
 
     /// <summary>
@@ -81,46 +83,13 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             if (isPlayer)
                 Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.",
                     MessageColors.ItemPickedUpAppearance));
-            
-            return true;
-        }
-        if (isPlayer)
-            Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
-        return false;
-    }
-
-    public bool Descend()
-    {
-        if (Parent == null)
-            throw new InvalidOperationException(
-                "Can't pick up an item into an inventory that's not connected to an object.");
-
-        if (Parent.CurrentMap == null)
-            throw new InvalidOperationException("Entity must be part of a map to pick up items.");
-
-        var isPlayer = Parent == Engine.Player;
-        
-        if (Parent.CurrentMap.GetEntitiesAt<RogueLikeEntity>(Parent.Position).Any(item => item is {Appearance.Glyph: 240}))
-        {
-            if (!isPlayer) return true;
-            Engine.GameScreen?.MessageLog.AddMessage(new($"You descend the stairs.",
-                MessageColors.ItemPickedUpAppearance));
-            // Generate a dungeon map, spawn enemies, and note player spawn location
-            var (map, playerSpawn) = Maps.Factory.Dungeon();
-
-            // Set GameScreen's map to the new one and spawn the player in appropriately
-            Engine.GameScreen?.SetMap(map, playerSpawn);
-
-            // Calculate initial FOV for player on this new map
-            Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
-            Maps.Factory.CurrentFloor += 1;
-
 
             return true;
         }
-        
+
         if (isPlayer)
-            Engine.GameScreen?.MessageLog.AddMessage(new("There are no stairs to descend here.", MessageColors.ImpossibleActionAppearance));
+            Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.",
+                MessageColors.ImpossibleActionAppearance));
         return false;
     }
 
@@ -142,5 +111,51 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 
         Items.RemoveAt(idx);
         return true;
+    }
+
+    public bool EquipWeapon(RogueLikeEntity item)
+    {
+        if (Parent == null)
+            throw new InvalidOperationException("Cannot equip item from an inventory not attached to an object.");
+        var weapon = item.AllComponents.GetFirst<IWeapon>();
+        var idx = Items.FindIndex(i => i == item);
+        if (idx == -1)
+            throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
+
+        // Unequip all other weapons
+        var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<IWeapon>()).ToList();
+        if (alreadyEquipped.Count > 0)
+        {
+            foreach (var e in alreadyEquipped)
+            {
+                e.AllComponents.GetFirst<IWeapon>().Unequip(Parent);
+            }
+        }
+
+        var result = weapon.Equip(Parent);
+        return result;
+    }
+    
+    public bool EquipArmor(RogueLikeEntity item)
+    {
+        if (Parent == null)
+            throw new InvalidOperationException("Cannot equip item from an inventory not attached to an object.");
+        var weapon = item.AllComponents.GetFirst<IArmor>();
+        var idx = Items.FindIndex(i => i == item);
+        if (idx == -1)
+            throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
+
+        // Unequip all other weapons
+        var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<IArmor>()).ToList();
+        if (alreadyEquipped.Count > 0)
+        {
+            foreach (var e in alreadyEquipped)
+            {
+                e.AllComponents.GetFirst<IArmor>().Unequip(Parent);
+            }
+        }
+
+        var result = weapon.Equip(Parent);
+        return result;
     }
 }
