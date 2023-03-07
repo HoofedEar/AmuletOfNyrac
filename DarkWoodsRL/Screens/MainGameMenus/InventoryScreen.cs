@@ -56,7 +56,6 @@ internal class InventoryScreen : MainGameMenu
 
     private void OnItemSelected(object? sender, ListBox.SelectedItemEventArgs e)
     {
-        Engine.DetailScreenAction = 0;
         var item = ((ListItem) e.Item).Item;
         var type = 0;
         if (item.AllComponents.Contains<IArmor>() || item.AllComponents.Contains<IWeapon>())

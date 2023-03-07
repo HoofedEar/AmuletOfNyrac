@@ -16,8 +16,6 @@ internal static class Engine
     // Null override because it's initialized via new-game/load game
     public static RogueLikeEntity Player = null!;
 
-    public static int DetailScreenAction;
-
     private static void Main()
     {
         Game.Create(ScreenWidth, ScreenHeight, "Fonts/Andux2x.font");
