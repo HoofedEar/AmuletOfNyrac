@@ -5,6 +5,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>DarkWoodsRL</RootNamespace>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,9 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Fonts\Andux2x.font">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Fonts\Andux16x24.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -26,6 +24,13 @@
       <None Update="Resources\Audio\impact_b.wav">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Fonts\Andux2x.font" />
+      <Content Include="Fonts\Andux2x.font">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

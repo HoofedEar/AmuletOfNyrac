@@ -26,11 +26,11 @@ internal static class Factory
     
     public static RogueLikeEntity Dagger()
     {
-        var potion = new RogueLikeEntity(Color.Silver, Color.Black, ')', layer: (int)GameMap.Layer.Items)
+        var potion = new RogueLikeEntity(Color.Silver, Color.Black, '/', layer: (int)GameMap.Layer.Items)
         {
             Name = "Dagger"
         };
-        potion.AllComponents.Add(new WeaponComponent());
+        potion.AllComponents.Add(new WeaponComponent(10, 2));
 
         return potion;
     }
@@ -41,7 +41,7 @@ internal static class Factory
         {
             Name = "LeatherArmor"
         };
-        potion.AllComponents.Add(new ArmorComponent());
+        potion.AllComponents.Add(new ArmorComponent(10));
 
         return potion;
     }

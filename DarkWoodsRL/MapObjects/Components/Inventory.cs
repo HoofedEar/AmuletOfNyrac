@@ -123,16 +123,16 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
 
         // Unequip all other weapons
-        var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<IWeapon>()).ToList();
+        var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<WeaponComponent>()).ToList();
         if (alreadyEquipped.Count > 0)
         {
             foreach (var e in alreadyEquipped)
             {
-                e.AllComponents.GetFirst<IWeapon>().Unequip(Parent);
+                e.AllComponents.GetFirst<WeaponComponent>().Unequip();
             }
         }
 
-        var result = weapon.Equip(Parent);
+        var result = weapon.Equip();
         return result;
     }
     
@@ -146,16 +146,32 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
 
         // Unequip all other weapons
-        var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<IArmor>()).ToList();
+        var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<ArmorComponent>()).ToList();
         if (alreadyEquipped.Count > 0)
         {
             foreach (var e in alreadyEquipped)
             {
-                e.AllComponents.GetFirst<IArmor>().Unequip(Parent);
+                e.AllComponents.GetFirst<ArmorComponent>().Unequip();
             }
         }
 
-        var result = weapon.Equip(Parent);
+        var result = weapon.Equip();
         return result;
+    }
+
+    public void UnequipDrop(RogueLikeEntity item)
+    {
+        var isWeapon = item.AllComponents.GetFirstOrDefault<WeaponComponent>();
+        if (isWeapon != null)
+        {
+            isWeapon.Unequip();
+            return;
+        }
+
+        var isArmor = item.AllComponents.GetFirstOrDefault<ArmorComponent>();
+        if (isArmor != null)
+        {
+            isArmor.Unequip();
+        }
     }
 }

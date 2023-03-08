@@ -67,6 +67,8 @@ public static class Factory
         motionControl.SetAction(Keys.OemComma,
             () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
         motionControl.SetAction(Keys.I, () => Game.Instance.Screen.Children.Add(new InventoryScreen()));
+        
+        motionControl.SetAction(Keys.Escape, () => Game.Instance.Screen.Children.Add(new PauseView()));
 
         player.AllComponents.Add(motionControl);
 

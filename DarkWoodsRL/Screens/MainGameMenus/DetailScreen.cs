@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.MapObjects.Components.Items.Armor;
@@ -12,8 +11,6 @@ namespace DarkWoodsRL.Screens.MainGameMenus;
 
 public class DetailScreen : MainGameMenu
 {
-    private RogueLikeEntity _item;
-
     public DetailScreen(RogueLikeEntity item, int type) : base(20, 10)
     {
         Title = item.Name.Replace(" (e)", "");
@@ -31,10 +28,23 @@ public class DetailScreen : MainGameMenu
             Text = "Drop",
             Position = (9, 9)
         };
+        drop.Click += (sender, args) => Drop(sender, args, item, playerInventory);
         Controls.Add(drop);
     }
 
-    private void Use(object sender, EventArgs args, RogueLikeEntity item, int type, Inventory playerInventory)
+    private void Drop(object? sender, EventArgs args, RogueLikeEntity item, Inventory inv)
+    {
+        Game.Instance.Screen.Children[^2].IsVisible = false;
+        Hide();
+        inv.UnequipDrop(item);
+        PlayerActionHelper.PlayerTakeAction(_ =>
+        {
+            inv.Drop(item);
+            return true;
+        });
+    }
+
+    private void Use(object? sender, EventArgs args, RogueLikeEntity item, int type, Inventory playerInventory)
     {
         switch (type)
         {

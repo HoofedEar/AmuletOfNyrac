@@ -20,17 +20,15 @@ namespace DarkWoodsRL.MapObjects.Components;
 internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
 {
     private int _hp;
-    private int _str; // Base Strength
-    private int _end; // Base Endurance
-    private int _dex; // Base Dexterity
+    private int _str;
+    private int _end;
+    private int _dex;
 
     public int STR
     {
         get => _str;
-        private set
+        set
         {
-            if (_str == value) return;
-
             _str = value;
             STRChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -41,10 +39,8 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     public int END
     {
         get => _end;
-        private set
+        set
         {
-            if (_end == value) return;
-
             _end = value;
             ENDChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -55,10 +51,8 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     public int DEX
     {
         get => _dex;
-        private set
+        set
         {
-            if (_dex == value) return;
-
             _dex = value;
             DEXChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -86,17 +80,13 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
 
     public int MaxHP { get; }
 
-    public int Strength { get; }
-    public int Endurance { get; }
-    public int Dexterity { get; }
-
     public Combatant(int hp, int endurance, int strength, int dexterity = 3)
         : base(false, false, false, false)
     {
         HP = MaxHP = hp;
-        Endurance = endurance;
-        Strength = strength;
-        Dexterity = dexterity;
+        END = endurance;
+        STR = strength;
+        DEX = dexterity;
     }
 
     public int Heal(int amount)
@@ -121,15 +111,16 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
             ? MessageColors.PlayerAtkAppearance
             : MessageColors.EnemyAtkAtkAppearance;
         var attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
-        
-        if (result <= Dice.Roll("1d20") + target.Endurance)
+
+        if (result <= Dice.Roll("1d20") + target.END)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{Parent!.Name} swings at {target.Parent!.Name} but misses.", atkTextColor));
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{Parent!.Name} swings at {target.Parent!.Name} but misses.",
+                atkTextColor));
             return;
         }
-        
+
         // Successful hit
-        var damage = Strength - target.Endurance;
+        var damage = STR - target.END;
         var atkSound = Parent == Engine.Player ? Sounds.HitA : Sounds.HitB;
         if (damage > 0)
         {

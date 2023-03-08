@@ -1,4 +1,6 @@
-﻿using DarkWoodsRL.Audio;
+﻿using System;
+using System.IO;
+using DarkWoodsRL.Audio;
 using DarkWoodsRL.Screens;
 using SadConsole;
 using SadRogue.Integration;
@@ -11,7 +13,7 @@ internal static class Engine
     public const int ScreenWidth = 60;
     public const int ScreenHeight = 30;
 
-    public static MainGame GameScreen;
+    public static MainGame? GameScreen;
 
     // Null override because it's initialized via new-game/load game
     public static RogueLikeEntity Player = null!;

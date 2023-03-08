@@ -3,6 +3,7 @@ using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.MapObjects.Components.Items.Armor;
 using DarkWoodsRL.MapObjects.Components.Items.Weapon;
+using SadConsole.Input;
 using SadConsole.UI.Controls;
 using SadRogue.Integration;
 
@@ -62,5 +63,16 @@ internal class InventoryScreen : MainGameMenu
             type = 1;
         var desc = new DetailScreen(item, type);
         desc.Show();
+    }
+    
+    public override bool ProcessKeyboard(Keyboard info)
+    {
+        if (!info.HasKeysPressed) return base.ProcessKeyboard(info);
+        if (!info.IsKeyPressed(Keys.Escape)) return base.ProcessKeyboard(info);
+
+        Hide();
+        Engine.GameScreen!.Map.IsFocused = true;
+
+        return base.ProcessKeyboard(info);
     }
 }

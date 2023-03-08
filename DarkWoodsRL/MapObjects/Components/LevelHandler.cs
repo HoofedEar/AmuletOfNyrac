@@ -18,20 +18,27 @@ public class LevelHandler : RogueLikeComponentBase<RogueLikeEntity>
     {
         var isPlayer = Parent == Engine.Player;
         var getTerrain = Parent?.CurrentMap?.GetTerrainAt<Terrain>(Parent.Position);
-        if (getTerrain is {Appearance.Glyph: 240})
+        if (getTerrain is not {Appearance.Glyph: 240})
         {
             if (!isPlayer) return false;
             Maps.Factory.CurrentDungeonLevel += 1;
 
-            // Set map type based on amulets found
-            // if (Maps.Factory.AmuletsFound[0])
-            if (Maps.Factory.CurrentDungeonLevel >= 1)
+            switch (Maps.Factory.CurrentDungeonLevel)
             {
-                GreenMap();
-            }
-            else
-            {
-                DefaultMap();
+                // Set map type based on amulets found
+                // if (Maps.Factory.AmuletsFound[0])
+                case 1:
+                    RedMap();
+                    break;
+                case 2:
+                    BlueMap();
+                    break;
+                case 3:
+                    GreenMap();
+                    break;
+                default:
+                    DefaultMap();
+                    break;
             }
 
             Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"You descend the stairs.",

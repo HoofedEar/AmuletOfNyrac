@@ -8,16 +8,19 @@ namespace DarkWoodsRL.MapObjects.Components.Items.Armor;
 public class ArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IArmor
 {
     public bool IsEquipped;
+    public int ENDMod;
 
-    public ArmorComponent() : base(false, false, false, false)
+    public ArmorComponent(int end = 0) : base(false, false, false, false)
     {
+        ENDMod = end;
     }
 
-    public bool Equip(RogueLikeEntity user)
+    public bool Equip()
     {
         if (IsEquipped) return false;
         if (Parent != null) Parent.Name += " (e)";
         IsEquipped = true;
+        Engine.Player.AllComponents.GetFirst<Combatant>().END += ENDMod;
         Engine.GameScreen?.MessageLog.AddMessage(new(
             $"You donned the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));
@@ -25,11 +28,12 @@ public class ArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IArmor
 
     }
 
-    public bool Unequip(RogueLikeEntity user)
+    public bool Unequip()
     {
         if (!IsEquipped) return false;
         if (Parent != null) Parent.Name = Parent.Name.Replace(" (e)", "");
         IsEquipped = false;
+        Engine.Player.AllComponents.GetFirst<Combatant>().END -= ENDMod;
         Engine.GameScreen?.MessageLog.AddMessage(new(
             $"You removed the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));
