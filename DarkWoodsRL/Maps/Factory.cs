@@ -106,7 +106,7 @@ internal static class Factory
             int potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
             for (int i = 0; i < potions; i++)
             {
-                var type = GlobalRandom.DefaultRNG.NextInt(0, 3);
+                var type = GlobalRandom.DefaultRNG.NextInt(0, 4);
                 switch (type)
                 {
                     case 0:
@@ -131,6 +131,14 @@ internal static class Factory
                         weapon.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                         map.AddEntity(weapon);
+                        break;
+                    }
+                    case 3:
+                    {
+                        var gold = MapObjects.Items.Factory.Gold();
+                        gold.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(gold);
                         break;
                     }
                 }

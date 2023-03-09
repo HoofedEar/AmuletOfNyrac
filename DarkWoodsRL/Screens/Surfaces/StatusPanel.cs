@@ -17,6 +17,7 @@ internal class StatusPanel : ControlsConsole
     public readonly Label STRStat;
     public readonly Label DEXStat;
     public readonly Label ENDStat;
+    public readonly Label GoldAmount;
 
     public StatusPanel(int width, int height)
         : base(width, height)
@@ -38,32 +39,38 @@ internal class StatusPanel : ControlsConsole
         {
             Position = (1, 1)
         };
-        Engine.Player.AllComponents.GetFirst<Combatant>().STRChanged += OnPlayerSTRChanged;
+        Engine.Player.AllComponents.GetFirst<Combatant>().STRChanged += OnPlayerStatsChanged;
         Controls.Add(STRStat);
 
         DEXStat = new Label("DEX 10")
         {
             Position = (1, 2)
         };
-        Engine.Player.AllComponents.GetFirst<Combatant>().DEXChanged += OnPlayerSTRChanged;
+        Engine.Player.AllComponents.GetFirst<Combatant>().DEXChanged += OnPlayerStatsChanged;
         Controls.Add(DEXStat);
 
         ENDStat = new Label("END 10")
         {
             Position = (1, 3)
         };
-        Engine.Player.AllComponents.GetFirst<Combatant>().ENDChanged += OnPlayerSTRChanged;
+        Engine.Player.AllComponents.GetFirst<Combatant>().ENDChanged += OnPlayerStatsChanged;
         Controls.Add(ENDStat);
         UpdateStats();
 
-        var gold = new Label("Gold: 0000")
+        GoldAmount = new Label("Gold: 0   ")
         {
             Position = (9, 2)
         };
-        Controls.Add(gold);
+        Engine.Player.AllComponents.GetFirst<Inventory>().GoldChanged += OnPlayerGoldChanged;
+        Controls.Add(GoldAmount);
     }
 
-    private void OnPlayerSTRChanged(object? sender, EventArgs e)
+    private void OnPlayerGoldChanged(object? sender, EventArgs e)
+    {
+        UpdateGold();
+    }
+    
+    private void OnPlayerStatsChanged(object? sender, EventArgs e)
     {
         UpdateStats();
     }
@@ -71,6 +78,12 @@ internal class StatusPanel : ControlsConsole
     private void OnPlayerHPChanged(object? sender, EventArgs e)
     {
         UpdateHPBar();
+    }
+
+    private void UpdateGold()
+    {
+        var inventory = Engine.Player.AllComponents.GetFirst<Inventory>();
+        GoldAmount.DisplayText = $"Gold: " + inventory.GOLD;
     }
 
     private void UpdateHPBar()
@@ -83,7 +96,6 @@ internal class StatusPanel : ControlsConsole
     private void UpdateStats()
     {
         var combatant = Engine.Player.AllComponents.GetFirst<Combatant>();
-        var inventory = Engine.Player.AllComponents.GetFirst<Inventory>();
         var baseSTR = combatant.STR;
         var baseDEX = combatant.DEX;
         var baseEND = combatant.END;

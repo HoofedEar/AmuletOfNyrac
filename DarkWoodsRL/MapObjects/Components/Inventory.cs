@@ -16,8 +16,20 @@ namespace DarkWoodsRL.MapObjects.Components;
 internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 {
     private int Capacity { get; }
+    public int _gold;
 
     public readonly List<RogueLikeEntity> Items;
+    public int GOLD
+    {
+        get => _gold;
+        set
+        {
+            _gold = value;
+            GoldChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public event EventHandler? GoldChanged;
 
     public Inventory(int capacity)
         : base(false, false, false, false)
@@ -87,6 +99,17 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             }
 
             item.CurrentMap!.RemoveEntity(item);
+            var gold = item.AllComponents.GetFirstOrDefault<GoldComponent>();
+            if (gold != null)
+            {
+                GOLD += gold.Value;
+                if (isPlayer)
+                    Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up {gold.Value} Gold.",
+                        MessageColors.ItemPickedUpAppearance));
+
+                return true;
+            }
+
             inventory.Items.Add(item);
 
             if (isPlayer)

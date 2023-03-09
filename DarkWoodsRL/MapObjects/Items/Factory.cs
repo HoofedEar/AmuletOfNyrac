@@ -13,6 +13,16 @@ namespace DarkWoodsRL.MapObjects.Items;
 /// </summary>
 internal static class Factory
 {
+    public static RogueLikeEntity Gold()
+    {
+        var gold = new RogueLikeEntity(Color.Gold, Color.Black, '*', layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Gold"
+        };
+        gold.AllComponents.Add(new GoldComponent());
+
+        return gold;
+    }
     public static RogueLikeEntity HealthPotion()
     {
         var potion = new RogueLikeEntity(Color.Goldenrod, Color.Black, '#', layer: (int)GameMap.Layer.Items)
