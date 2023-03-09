@@ -58,15 +58,16 @@ public static class Factory
         var motionControl = new CustomPlayerKeybindingsComponent();
         motionControl.SetMotions(PlayerKeybindingsComponent.ArrowMotions);
         motionControl.SetMotions(PlayerKeybindingsComponent.NumPadAllMotions);
+        motionControl.SetMotions(PlayerKeybindingsComponent.WasdMotions);
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
         motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift),
             () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<LevelHandler>().Descend()));
 
         // Add controls for picking up items and getting to inventory screen.
-        motionControl.SetAction(Keys.OemComma,
+        motionControl.SetAction(Keys.Space,
             () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
-        motionControl.SetAction(Keys.I, () => Game.Instance.Screen.Children.Add(new InventoryScreen()));
+        motionControl.SetAction(Keys.E, () => Game.Instance.Screen.Children.Add(new InventoryScreen()));
         
         motionControl.SetAction(Keys.Escape, () => Game.Instance.Screen.Children.Add(new PauseView()));
 

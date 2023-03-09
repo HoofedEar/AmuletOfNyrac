@@ -18,7 +18,7 @@ public class LevelHandler : RogueLikeComponentBase<RogueLikeEntity>
     {
         var isPlayer = Parent == Engine.Player;
         var getTerrain = Parent?.CurrentMap?.GetTerrainAt<Terrain>(Parent.Position);
-        if (getTerrain is not {Appearance.Glyph: 240})
+        if (getTerrain is {Appearance.Glyph: 240})
         {
             if (!isPlayer) return false;
             Maps.Factory.CurrentDungeonLevel += 1;

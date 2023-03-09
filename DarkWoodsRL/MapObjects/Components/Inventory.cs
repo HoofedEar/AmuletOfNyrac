@@ -67,7 +67,16 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         var inventory = Parent.AllComponents.GetFirst<Inventory>();
         foreach (var item in Parent.CurrentMap.GetEntitiesAt<RogueLikeEntity>(Parent.Position))
         {
-            if (!item.AllComponents.Contains<ICarryable>()) continue;
+            if (!item.AllComponents.Contains<ICarryable>())
+            {
+                var terrain = Parent.CurrentMap.GetTerrainAt<Terrain>(Parent.Position);
+                if (terrain is {Appearance.Glyph: 240})
+                {
+                    Parent.AllComponents.GetFirst<LevelHandler>().Descend();
+                    return false;
+                }
+                continue;
+            }
 
             if (inventory.Items.Count >= inventory.Capacity)
             {
