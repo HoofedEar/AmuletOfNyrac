@@ -3,9 +3,6 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
-.vs/DarkWoodsRL/FileContentIndex/07f0ac4b-98b6-43aa-8208-163b48f470df.vsidx
-.vs/DarkWoodsRL/FileContentIndex/read.lock
-.vs/DarkWoodsRL/v17/.suo
-.vs/DarkWoodsRL/DesignTimeBuild/.dtbcache.v2
+.vs/
 .DS_Store
 /DarkWoodsRL/.DS_Store
