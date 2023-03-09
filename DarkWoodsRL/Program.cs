@@ -1,5 +1,4 @@
-﻿using DarkWoodsRL.Audio;
-using DarkWoodsRL.Screens;
+﻿using DarkWoodsRL.Screens;
 using SadConsole;
 using SadRogue.Integration;
 
@@ -22,12 +21,10 @@ internal static class Engine
         Game.Instance.OnStart = Init;
         Game.Instance.Run();
         Game.Instance.Dispose();
-        SoundSystem.Discard();
     }
 
     private static void Init()
     {
-        SoundSystem.Init();
         // Main menu
         GameHost.Instance.Screen = new MainMenu();
 

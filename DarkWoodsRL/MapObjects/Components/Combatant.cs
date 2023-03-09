@@ -1,5 +1,4 @@
 ﻿using System;
-using DarkWoodsRL.Audio;
 using DarkWoodsRL.Themes;
 using GoRogue.DiceNotation;
 using SadRogue.Integration;
@@ -120,12 +119,9 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
 
         // Successful hit
         var damage = STR - target.END;
-        var atkSound = Parent == Engine.Player ? Sounds.HitA : Sounds.HitB;
         if (damage > 0)
         {
             Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor));
-            var sound = new SoundSystem();
-            sound.Play(atkSound);
             target.HP -= damage;
         }
         else
