@@ -7,3 +7,5 @@ riderModule.iml
 .vs/DarkWoodsRL/FileContentIndex/read.lock
 .vs/DarkWoodsRL/v17/.suo
 .vs/DarkWoodsRL/DesignTimeBuild/.dtbcache.v2
+.DS_Store
+/DarkWoodsRL/.DS_Store
