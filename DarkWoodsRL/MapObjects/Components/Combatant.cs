@@ -4,7 +4,6 @@ using DarkWoodsRL.Themes;
 using GoRogue.DiceNotation;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
-using SandsOfDelirium.Helpers.Audio;
 
 namespace DarkWoodsRL.MapObjects.Components;
 

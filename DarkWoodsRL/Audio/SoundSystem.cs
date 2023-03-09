@@ -44,10 +44,9 @@ public class SoundSystem
         ALC.MakeContextCurrent(ALContext.Null);
     }
 
-    public void Play(string sound)
+    public void Play(FileStream sound)
     {
-        var stream = new FileStream(sound, FileMode.Open);
-        var wav = _readWav(stream);
+        var wav = _readWav(sound);
 
         var format = wav.BitsPerSample switch
         {
