@@ -12,7 +12,4 @@ public class GoldComponent : RogueLikeComponentBase<RogueLikeEntity>, ICarryable
     {
         Value = GlobalRandom.DefaultRNG.NextInt(10, 51);
     }
-    
-    
-    
 }

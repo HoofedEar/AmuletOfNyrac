@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.MapObjects.Components.Items.Armor;
@@ -11,25 +12,53 @@ namespace DarkWoodsRL.Screens.MainGameMenus;
 
 public class DetailScreen : MainGameMenu
 {
-    public DetailScreen(RogueLikeEntity item, int type) : base(20, 10)
+    public Label ItemType;
+    public List<Label> Details = new() {new Label(28), new Label(28), new Label(28), new Label(28), new Label(28)};
+
+    public DetailScreen(RogueLikeEntity item, int type) : base(30, 11)
     {
         Title = item.Name.Replace(" (e)", "");
         var playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
+
+        ItemType = new Label("Type: Weapon")
+        {
+            Position = (1, 1)
+        };
+        Controls.Add(ItemType);
+
+        for (var i = 0; i < Details.Count; i++)
+        {
+            Details[i].Position = (1, 2 + i);
+            Controls.Add(Details[i]);
+        }
+
         var action = new Button(7)
         {
             Text = ParseType(type),
-            Position = (1, 9)
+            Position = (1, 10)
         };
-        action.Click += (sender, args) =>  Use(sender, args, item, type, playerInventory);
+        action.Click += (sender, args) => Use(sender, args, item, type, playerInventory);
         Controls.Add(action);
 
         var drop = new Button(6)
         {
             Text = "Drop",
-            Position = (9, 9)
+            Position = (9, 10)
         };
         drop.Click += (sender, args) => Drop(sender, args, item, playerInventory);
         Controls.Add(drop);
+
+        ParseDetails(item);
+    }
+
+    private void ParseDetails(RogueLikeEntity item)
+    {
+        var details = item.AllComponents.GetFirst<DetailsComponent>();
+        ItemType.DisplayText = "Type: " + details.Type;
+        for (var i = 0; i < details.Description.Length; i++)
+        {
+            Details[i].DisplayText = details.Description[i];
+        }
     }
 
     private void Drop(object? sender, EventArgs args, RogueLikeEntity item, Inventory inv)
@@ -55,6 +84,7 @@ public class DetailScreen : MainGameMenu
                 {
                     PlayerActionHelper.PlayerTakeAction(_ => playerInventory.Consume(item));
                 }
+
                 Game.Instance.Screen.Children[^2].IsVisible = false;
                 Hide();
                 break;
@@ -72,6 +102,7 @@ public class DetailScreen : MainGameMenu
                 {
                     PlayerActionHelper.PlayerTakeAction(_ => playerInventory.EquipArmor(item));
                 }
+
                 Game.Instance.Screen.Children[^2].IsVisible = false;
                 Hide();
                 break;

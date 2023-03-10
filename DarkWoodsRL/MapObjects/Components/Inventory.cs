@@ -89,8 +89,8 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
                 }
                 continue;
             }
-
-            if (inventory.Items.Count >= inventory.Capacity)
+            var gold = item.AllComponents.GetFirstOrDefault<GoldComponent>();
+            if (inventory.Items.Count >= inventory.Capacity && gold == null)
             {
                 if (isPlayer)
                     Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full.",
@@ -99,7 +99,6 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             }
 
             item.CurrentMap!.RemoveEntity(item);
-            var gold = item.AllComponents.GetFirstOrDefault<GoldComponent>();
             if (gold != null)
             {
                 GOLD += gold.Value;

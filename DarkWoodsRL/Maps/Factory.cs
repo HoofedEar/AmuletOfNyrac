@@ -24,7 +24,6 @@ internal static class Factory
     private const int MaxPotionsPerRoom = 4;
 
     public static int CurrentDungeonLevel = 0;
-    public static bool[] AmuletsFound = {false, false, false, false};
 
     public static (GameMap map, Point playerSpawn) Dungeon()
     {
@@ -60,14 +59,7 @@ internal static class Factory
 
         switch (CurrentDungeonLevel)
         {
-            // If we are on level 5 or deeper, and we don't have the Pearl Amulet, spawn it.
-            case >= 5 when AmuletsFound[0] == false:
-                // Spawn Pearl Amulet
-                break;
-            // If we are on level 10 or deeper, and we have the Pearl Amulet, but don't have the Emerald Amulet, spawn it.
-            case >= 10 when AmuletsFound[1] == false && AmuletsFound[0]:
-                // And so on
-                break;
+            // Handle spawning different enemies based on the floor
         }
 
         return (map, playerSpawn);
@@ -111,7 +103,7 @@ internal static class Factory
                 {
                     case 0:
                     {
-                        var potion = MapObjects.Items.Factory.HealthPotion();
+                        var potion = MapObjects.Items.Other.Honeycomb();
                         potion.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                         map.AddEntity(potion);
@@ -119,7 +111,7 @@ internal static class Factory
                     }
                     case 1:
                     {
-                        var armor = MapObjects.Items.Factory.LeatherArmor();
+                        var armor = MapObjects.Items.Weapons.LeatherArmor();
                         armor.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                         map.AddEntity(armor);
@@ -127,7 +119,7 @@ internal static class Factory
                     }
                     case 2:
                     {
-                        var weapon = MapObjects.Items.Factory.Dagger();
+                        var weapon = MapObjects.Items.Weapons.Dagger();
                         weapon.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                         map.AddEntity(weapon);
@@ -135,7 +127,7 @@ internal static class Factory
                     }
                     case 3:
                     {
-                        var gold = MapObjects.Items.Factory.Gold();
+                        var gold = MapObjects.Items.Other.Gold();
                         gold.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                         map.AddEntity(gold);

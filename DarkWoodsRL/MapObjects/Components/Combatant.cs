@@ -77,14 +77,16 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     public event EventHandler? Died;
 
     public int MaxHP { get; }
+    public string CombatVerb;
 
-    public Combatant(int hp, int endurance, int strength, int dexterity = 3)
+    public Combatant(int hp, int endurance, int strength, int dexterity = 3, string combatVerb = "swings at")
         : base(false, false, false, false)
     {
         HP = MaxHP = hp;
         END = endurance;
         STR = strength;
         DEX = dexterity;
+        CombatVerb = combatVerb;
     }
 
     public int Heal(int amount)
@@ -108,11 +110,11 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         var atkTextColor = Parent == Engine.Player
             ? MessageColors.PlayerAtkAppearance
             : MessageColors.EnemyAtkAtkAppearance;
-        var attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
+        var attackDesc = $"{Parent!.Name} {CombatVerb} {target.Parent!.Name}";
 
         if (result <= Dice.Roll("1d20") + target.END)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{Parent!.Name} swings at {target.Parent!.Name} but misses.",
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{Parent!.Name} {CombatVerb} {target.Parent!.Name} but misses.",
                 atkTextColor));
             return;
         }

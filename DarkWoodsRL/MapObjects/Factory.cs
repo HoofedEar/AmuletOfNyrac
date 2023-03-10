@@ -111,7 +111,7 @@ public static class Factory
 
         // Add AI component to bump action toward the player if the player is in view
         enemy.AllComponents.Add(new HostileAI());
-        enemy.AllComponents.Add(new Combatant(16, 1, 4));
+        enemy.AllComponents.Add(new Combatant(16, 1, 4, combatVerb: "tries to bludgeon"));
 
         return enemy;
     }
