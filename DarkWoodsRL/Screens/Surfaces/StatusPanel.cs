@@ -57,7 +57,7 @@ internal class StatusPanel : ControlsConsole
         Controls.Add(ENDStat);
         UpdateStats();
 
-        GoldAmount = new Label("Gold: 0   ")
+        GoldAmount = new Label("$:0   ")
         {
             Position = (9, 2)
         };
@@ -83,7 +83,7 @@ internal class StatusPanel : ControlsConsole
     private void UpdateGold()
     {
         var inventory = Engine.Player.AllComponents.GetFirst<Inventory>();
-        GoldAmount.DisplayText = $"Gold: " + inventory.GOLD;
+        GoldAmount.DisplayText = $"$:" + inventory.GOLD;
     }
 
     private void UpdateHPBar()

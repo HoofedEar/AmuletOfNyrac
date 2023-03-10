@@ -13,11 +13,11 @@ internal static class Weapons
     {
         var weapon = new RogueLikeEntity(Color.Silver, Color.Black, '/', layer: (int) GameMap.Layer.Items)
         {
-            Name = "Dagger"
+            Name = "Bugleberry's Lament"
         };
         weapon.AllComponents.Add(new WeaponComponent(10, 2));
-        weapon.AllComponents.Add(new DetailsComponent("Weapon", new[] {"+10 STR, +2 DEX", "", "A smol guy."}));
-        return weapon;
+        weapon.AllComponents.Add(new DetailsComponent("Weapon", new[] {"", "", "A smol guy."}));
+        return weapon; 
     }
 
     public static RogueLikeEntity LeatherArmor()

@@ -9,6 +9,7 @@ public class WeaponComponent : RogueLikeComponentBase<RogueLikeEntity>, IWeapon
     public bool IsEquipped;
     public int STRMod;
     public int DEXMod;
+    public int EnchantLvl = 0;
     public WeaponComponent(int str = 0, int dex = 0) : base(false, false, false, false)
     {
         STRMod = str;

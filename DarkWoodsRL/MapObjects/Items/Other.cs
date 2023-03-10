@@ -33,4 +33,26 @@ internal static class Other
 
         return honeycomb;
     }
+    
+    public static RogueLikeEntity ScrollOfEnchantWeapon()
+    {
+        var enchantWeapon = new RogueLikeEntity(Color.BlueViolet, Color.Black, '?', layer: (int)GameMap.Layer.Items)
+        {
+            Name = "Scroll of Enchant Weapon"
+        };
+        enchantWeapon.AllComponents.Add(new EnchantWeaponComponent());
+        enchantWeapon.AllComponents.Add(new DetailsComponent("Scroll", new []{"Improves an equipped weapon."}));
+        return enchantWeapon;
+    }
+    
+    public static RogueLikeEntity ScrollOfEnchantArmor()
+    {
+        var enchantArmor = new RogueLikeEntity(Color.AnsiGreenBright, Color.Black, '?', layer: (int)GameMap.Layer.Items)
+        {
+            Name = "Mr. Greenz Will"
+        };
+        enchantArmor.AllComponents.Add(new EnchantArmorComponent());
+        enchantArmor.AllComponents.Add(new DetailsComponent("Scroll", new []{"Improves worn armor."}));
+        return enchantArmor;
+    }
 }

@@ -112,7 +112,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             inventory.Items.Add(item);
 
             if (isPlayer)
-                Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.",
+                Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up {item.Name}.",
                     MessageColors.ItemPickedUpAppearance));
 
             return true;
@@ -148,10 +148,18 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
     {
         if (Parent == null)
             throw new InvalidOperationException("Cannot equip item from an inventory not attached to an object.");
-        var weapon = item.AllComponents.GetFirst<IWeapon>();
+        var weapon = item.AllComponents.GetFirst<WeaponComponent>();
         var idx = Items.FindIndex(i => i == item);
         if (idx == -1)
             throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
+        
+        if (weapon.IsEquipped)
+        {
+            Engine.GameScreen?.MessageLog.AddMessage(new(
+                "You are already wielding this.",
+                MessageColors.ImpossibleActionAppearance));
+            return false;
+        }
 
         // Unequip all other weapons
         var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<WeaponComponent>()).ToList();
@@ -171,11 +179,19 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
     {
         if (Parent == null)
             throw new InvalidOperationException("Cannot equip item from an inventory not attached to an object.");
-        var weapon = item.AllComponents.GetFirst<IArmor>();
+        var armor = item.AllComponents.GetFirst<ArmorComponent>();
         var idx = Items.FindIndex(i => i == item);
         if (idx == -1)
             throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
 
+        if (armor.IsEquipped)
+        {
+            Engine.GameScreen?.MessageLog.AddMessage(new(
+                "You are already wearing this.",
+                MessageColors.ImpossibleActionAppearance));
+            return false;
+        }
+        
         // Unequip all other weapons
         var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<ArmorComponent>()).ToList();
         if (alreadyEquipped.Count > 0)
@@ -186,7 +202,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             }
         }
 
-        var result = weapon.Equip();
+        var result = armor.Equip();
         return result;
     }
 

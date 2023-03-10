@@ -27,7 +27,7 @@ internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, ICon
         {
             if (isPlayer)
                 Engine.GameScreen?.MessageLog.AddMessage(new(
-                    $"You consume the {Parent!.Name}, and recover {amountRecovered} HP!",
+                    $"You eat the {Parent!.Name}, and recover {amountRecovered} HP!",
                     MessageColors.HealthRecoveredAppearance));
             return true;
         }

@@ -8,6 +8,7 @@ namespace DarkWoodsRL.MapObjects.Components.Items.Armor;
 public class ArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IArmor
 {
     public bool IsEquipped;
+    public int EnchantLvl = 0;
     public int ENDMod;
 
     public ArmorComponent(int end = 0) : base(false, false, false, false)
@@ -25,7 +26,6 @@ public class ArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IArmor
             $"You donned the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));
         return true;
-
     }
 
     public bool Unequip()

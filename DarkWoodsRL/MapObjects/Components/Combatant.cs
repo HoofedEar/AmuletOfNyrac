@@ -1,6 +1,7 @@
 ﻿using System;
 using DarkWoodsRL.Themes;
 using GoRogue.DiceNotation;
+using GoRogue.Random;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 
@@ -123,11 +124,26 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         var damage = STR - target.END;
         if (damage > 0)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor));
+            var prefixWord = GeneratePrefixWord();
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.", atkTextColor));
             target.HP -= damage;
         }
         else
             Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor));
+    }
+
+    private string GeneratePrefixWord()
+    {
+        return GlobalRandom.DefaultRNG.NextInt(0, 6) switch
+        {
+            0 => "BAM!",
+            1 => "BOINK!",
+            2 => "SMACK!",
+            3 => "SPLAT!",
+            4 => "KAPOW!",
+            5 => "WHAM!",
+            _ => "CRACK!"
+        };
     }
 
     public bool OnBumped(RogueLikeEntity source)

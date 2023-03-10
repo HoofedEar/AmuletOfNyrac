@@ -25,7 +25,7 @@ internal class MainGame : ScreenObject
     /// </summary>
     public readonly SurfaceComponentFollowTarget ViewLock;
 
-    private const int StatusBarWidth = 20;
+    private const int StatusBarWidth = 15;
     const int BottomPanelHeight = 5;
 
     public MainGame(GameMap map, Point playerSpawn)

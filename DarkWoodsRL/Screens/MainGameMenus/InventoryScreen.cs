@@ -28,6 +28,7 @@ internal class ListItem
 internal class InventoryScreen : MainGameMenu
 {
     private readonly Inventory _playerInventory;
+    private readonly ListBox? _itemList;
 
     public InventoryScreen()
         : base(30, 15)
@@ -42,22 +43,23 @@ internal class InventoryScreen : MainGameMenu
         }
 
         // Find any consumable items and add them to a ListBox
-        var list = new ListBox(Width - 2, Height - 2) {Position = (1, 1), SingleClickItemExecute = true};
+        _itemList = new ListBox(Width - 2, Height - 2) {Position = (1, 1), SingleClickItemExecute = true};
 
         foreach (var item in _playerInventory.Items)
         {
-            list.Items.Add(new ListItem {Item = item});
+            _itemList.Items.Add(new ListItem {Item = item});
         }
 
-        Controls.Add(list);
+        Controls.Add(_itemList);
 
         // Handle when an item is selected by using it.
-        list.SelectedItemExecuted += OnItemSelected;
+        _itemList.SelectedItemExecuted += OnItemSelected;
     }
 
     private void OnItemSelected(object? sender, ListBox.SelectedItemEventArgs e)
     {
         var item = ((ListItem) e.Item).Item;
+        _itemList!.SelectedItem = null;
         var type = 0;
         if (item.AllComponents.Contains<IArmor>() || item.AllComponents.Contains<IWeapon>())
             type = 1;
