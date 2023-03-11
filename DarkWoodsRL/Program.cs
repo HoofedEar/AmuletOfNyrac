@@ -17,6 +17,8 @@ internal static class Engine
 
     private static void Main()
     {
+        Settings.WindowTitle = "Game!";
+
         Game.Create(ScreenWidth, ScreenHeight, "Fonts/Andux2x.font");
         Game.Instance.OnStart = Init;
         Game.Instance.Run();
@@ -25,6 +27,8 @@ internal static class Engine
 
     private static void Init()
     {
+        SadConsole.Game.Instance.SetSplashScreens(new SadConsole.SplashScreens.Ansi1());
+
         // Main menu
         GameHost.Instance.Screen = new MainMenu();
 
