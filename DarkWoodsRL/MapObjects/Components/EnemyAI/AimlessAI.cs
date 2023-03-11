@@ -8,6 +8,9 @@ using SadRogue.Primitives;
 
 namespace DarkWoodsRL.MapObjects.Components.EnemyAI;
 
+/// <summary>
+/// Parent moves around randomly, can sometimes beat up other enemies
+/// </summary>
 public class AimlessAI : RogueLikeComponentBase<RogueLikeEntity>, IEnemyAI
 {
     public bool IsAngry;
@@ -36,7 +39,7 @@ public class AimlessAI : RogueLikeComponentBase<RogueLikeEntity>, IEnemyAI
         else
         {
             if (!Parent.CurrentMap.PlayerFOV.CurrentFOV.Contains(Parent.Position)) return;
-            if (Parent.AllComponents.GetFirst<Combatant.CombatantComponant>().HP <= 0) return;
+            if (Parent.AllComponents.GetFirst<Combatant.CombatantComponent>().HP <= 0) return;
 
             var path = Parent.CurrentMap.AStar.ShortestPath(Parent.Position, Engine.Player.Position);
             if (path == null) return;

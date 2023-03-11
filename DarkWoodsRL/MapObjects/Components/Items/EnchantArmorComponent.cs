@@ -38,7 +38,7 @@ public class EnchantArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IC
             armor.EnchantLvl += 1;
             armor.ENDMod += 1;
             // have to adjust the players value live too
-            var combat = consumer.AllComponents.GetFirst<Combatant.CombatantComponant>();
+            var combat = consumer.AllComponents.GetFirst<Combatant.CombatantComponent>();
             combat.END += 1;
             if (armor.Parent != null)
                 armor.Parent.Name = "+" + armor.EnchantLvl + " " + armor.Parent.Name.Replace("+" + prev + " ", "");

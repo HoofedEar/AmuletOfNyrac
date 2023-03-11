@@ -19,7 +19,7 @@ public static class Aggressive
 
         // Add AI component to bump action toward the player if the player is in view
         enemy.AllComponents.Add(new AimlessAI());
-        enemy.AllComponents.Add(new CombatantComponant(10, 0, 3));
+        enemy.AllComponents.Add(new CombatantComponent(10, 0, 3));
 
         return enemy;
     }
@@ -34,7 +34,7 @@ public static class Aggressive
 
         // Add AI component to bump action toward the player if the player is in view
         enemy.AllComponents.Add(new AimlessAI());
-        enemy.AllComponents.Add(new CombatantComponant(16, 1, 4, combatVerb: "tries to bludgeon"));
+        enemy.AllComponents.Add(new CombatantComponent(16, 1, 4, combatVerb: "tries to bludgeon"));
 
         return enemy;
     }

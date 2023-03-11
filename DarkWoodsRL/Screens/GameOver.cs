@@ -11,6 +11,7 @@ namespace DarkWoodsRL.Screens;
 public class GameOver : ControlsConsole
 {
     private int _score;
+
     public GameOver(string message, Color color, int score) : base(16, 10)
     {
         _score = score;
@@ -24,7 +25,7 @@ public class GameOver : ControlsConsole
             Position = (0, 0)
         };
         Controls.Add(title);
-        
+
         var scoreVis = new Label("Final score:")
         {
             Name = "ScoreLabel",
@@ -34,7 +35,7 @@ public class GameOver : ControlsConsole
         };
         Controls.Add(scoreVis);
 
-        var scoreLabel = new Label(""+score)
+        var scoreLabel = new Label("" + score)
         {
             Name = "ScoreValue",
             TextColor = Color.Silver,
@@ -43,12 +44,21 @@ public class GameOver : ControlsConsole
         };
         Controls.Add(scoreLabel);
 
+        var floorLabel = new Label("Depth: " + Maps.Factory.CurrentDungeonDepth)
+        {
+            Name = "FloorDepth",
+            TextColor = Color.Silver,
+            Alignment = HorizontalAlignment.Center,
+            Position = (0, 5)
+        };
+        Controls.Add(floorLabel);
+
         // Add buttons
         var newGame = new Button(Width)
         {
             Name = "NewGameBtn",
             Text = "New Game",
-            Position = (0, 6)
+            Position = (0, 9)
         };
         newGame.Click += NewGameOnClick;
         Controls.Add(newGame);
@@ -58,8 +68,8 @@ public class GameOver : ControlsConsole
     {
         // Create player entity
         Engine.Player = Factory.Player();
-        Maps.Factory.CurrentDungeonLevel = 0;
-        LevelHandlerComponent.DefaultMap();
+        Maps.Factory.CurrentDungeonDepth = 0;
+        DepthHandlerComponent.DefaultMap();
 
         // Generate a dungeon map, spawn enemies, and note player spawn location
         var (map, playerSpawn) = Maps.Factory.Dungeon();

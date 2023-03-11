@@ -22,7 +22,7 @@ internal class HealingConsumableComponent : RogueLikeComponentBase<RogueLikeEnti
     {
         var isPlayer = consumer == Engine.Player;
 
-        var combatant = consumer.AllComponents.GetFirst<Combatant.CombatantComponant>();
+        var combatant = consumer.AllComponents.GetFirst<Combatant.CombatantComponent>();
         var amountRecovered = combatant.Heal(Amount);
         if (amountRecovered > 0)
         {

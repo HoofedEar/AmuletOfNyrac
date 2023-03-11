@@ -2,7 +2,7 @@
 Armor is a little less common since it can help survivability
 
 ### Regular Armor
-- [ ] Chest Barrel (KOL)
+- [x] Chest Barrel (KOL)
 - [ ] Punk Rock Jacket (KOL)
 - [ ] Tye-dye Shirt
 - [ ] Leather Armor

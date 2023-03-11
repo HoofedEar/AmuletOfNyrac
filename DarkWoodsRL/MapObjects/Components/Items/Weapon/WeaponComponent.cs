@@ -25,8 +25,8 @@ public class WeaponComponent : RogueLikeComponentBase<RogueLikeEntity>, IWeapon
         }
         if (Parent != null) Parent.Name += " (e)";
         IsEquipped = true;
-        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponant>().STR += STRMod;
-        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponant>().DEX += DEXMod;
+        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponent>().STR += STRMod;
+        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponent>().DEX += DEXMod;
         Engine.GameScreen?.MessageLog.AddMessage(new(
             $"You wield the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));
@@ -38,8 +38,8 @@ public class WeaponComponent : RogueLikeComponentBase<RogueLikeEntity>, IWeapon
         if (!IsEquipped) return false;
         if (Parent != null) Parent.Name = Parent.Name.Replace(" (e)", "");
         IsEquipped = false;
-        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponant>().STR -= STRMod;
-        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponant>().DEX -= DEXMod;
+        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponent>().STR -= STRMod;
+        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponent>().DEX -= DEXMod;
         Engine.GameScreen?.MessageLog.AddMessage(new(
             $"You put away the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));

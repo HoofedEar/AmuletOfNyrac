@@ -52,7 +52,7 @@ internal class MainGame : ScreenObject
         };
 
         // Add player death handler
-        Engine.Player.AllComponents.GetFirst<CombatantComponant>().Died += PlayerDeath;
+        Engine.Player.AllComponents.GetFirst<CombatantComponent>().Died += PlayerDeath;
 
         // Write welcome message
         MessageLog.AddMessage(new("Beware! This castle ruin is filled with dark creatures that seek your blood.",
@@ -95,7 +95,7 @@ internal class MainGame : ScreenObject
     /// </summary>
     private static void PlayerDeath(object? s, EventArgs e)
     {
-        Engine.Player.AllComponents.GetFirst<CombatantComponant>().Died -= PlayerDeath;
+        Engine.Player.AllComponents.GetFirst<CombatantComponent>().Died -= PlayerDeath;
         // Go back to main menu for now
         Game.Instance.Screen = new GameOver("    YOU DIED", Color.DarkRed,
             Engine.Player.AllComponents.GetFirst<InventoryComponent>().Gold);

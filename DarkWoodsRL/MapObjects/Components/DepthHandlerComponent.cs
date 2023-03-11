@@ -8,9 +8,9 @@ using SadRogue.Primitives;
 
 namespace DarkWoodsRL.MapObjects.Components;
 
-public class LevelHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
+public class DepthHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
 {
-    public LevelHandlerComponent() : base(false, false, false, false)
+    public DepthHandlerComponent() : base(false, false, false, false)
     {
     }
 
@@ -21,19 +21,19 @@ public class LevelHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
         if (getTerrain is {Appearance.Glyph: 240})
         {
             if (!isPlayer) return false;
-            Maps.Factory.CurrentDungeonLevel += 1;
+            Maps.Factory.CurrentDungeonDepth += 1;
 
-            switch (Maps.Factory.CurrentDungeonLevel)
+            switch (Maps.Factory.CurrentDungeonDepth)
             {
                 // Set map type based on amulets found
                 // if (Maps.Factory.AmuletsFound[0])
-                case 1:
+                case > 15:
                     RedMap();
                     break;
-                case 2:
+                case > 10:
                     BlueMap();
                     break;
-                case 3:
+                case > 5:
                     GreenMap();
                     break;
                 default:
@@ -56,7 +56,7 @@ public class LevelHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
         }
 
         if (isPlayer)
-            Engine.GameScreen?.MessageLog.AddMessage(new("There are no stairs to descend here.",
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString("There are no stairs to descend here.",
                 MessageColors.ImpossibleActionAppearance));
         return false;
     }
@@ -99,7 +99,7 @@ public class LevelHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
         walls.Light.Glyph = 178;
         walls.Dark.Glyph = 178;
     }
-    
+
     private void BlueMap()
     {
         var floor = Factory.AppearanceDefinitions.First(f => f.Key == "Floor").Value;

@@ -39,7 +39,7 @@ public class EnchantWeaponComponent : RogueLikeComponentBase<RogueLikeEntity>, I
             weapon.STRMod += 1;
             weapon.DEXMod += 1;
             // have to adjust the players value live too
-            var combat = consumer.AllComponents.GetFirst<Combatant.CombatantComponant>();
+            var combat = consumer.AllComponents.GetFirst<Combatant.CombatantComponent>();
             combat.STR += 1;
             combat.DEX += 1;
             if (weapon.Parent != null)

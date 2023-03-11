@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DarkWoodsRL.MapObjects.Components.EnemyAI;
 using DarkWoodsRL.MapObjects.Components.Interfaces;
 using DarkWoodsRL.Themes;
@@ -19,7 +20,7 @@ namespace DarkWoodsRL.MapObjects.Components.Combatant;
 /// Endurance determines how much damage is resisted when they take damage.
 /// Dexterity determines how often they are successful when attempting to hit something.
 /// </remarks>
-internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
+internal class CombatantComponent : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
 {
     private int _hp;
     private int _str;
@@ -101,7 +102,7 @@ internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBu
     public readonly int ProvidedXp; // XP given when killed
     public RogueLikeEntity? LastHit;
 
-    public CombatantComponant(int hp, int endurance, int strength, int dexterity = 3, string combatVerb = "swings at",
+    public CombatantComponent(int hp, int endurance, int strength, int dexterity = 3, string combatVerb = "swings at",
         int xp = 10)
         : base(false, false, false, false)
     {
@@ -143,7 +144,7 @@ internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBu
     /// 20 - the attackers level - the defenders armor. If the attack is greater or equal to the defense, the attack succeeded.
     /// </summary>
     /// <param name="target"></param>
-    private void Attack(CombatantComponant target)
+    private void Attack(CombatantComponent target)
     {
         var roll = Dice.Roll("1d20");
         var result = Parent == Engine.Player ? roll + DEX + 2 : roll + DEX;
@@ -154,9 +155,14 @@ internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBu
 
         if (result <= Dice.Roll("1d20") + target.END)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString(
-                $"{Parent!.Name} {_combatVerb} {target.Parent!.Name} but misses.",
-                atkTextColor));
+            // If we witness this
+            if (Parent.CurrentMap!.PlayerFOV.CurrentFOV.Contains(Parent.Position))
+            {
+                Engine.GameScreen?.MessageLog.AddMessage(new ColoredString(
+                    $"{Parent!.Name} {_combatVerb} {target.Parent!.Name} but misses.",
+                    atkTextColor));
+            }
+
             target.LastHit = Parent;
             if (target.LastHit != Engine.Player) return;
             var aimless = target.Parent.AllComponents.GetFirstOrDefault<AimlessAI>();
@@ -172,10 +178,14 @@ internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBu
         var damage = STR - target.END;
         if (damage > 0)
         {
-            var prefixWord = GeneratePrefixWord();
-            Engine.GameScreen?.MessageLog.AddMessage(
-                new ColoredString($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.",
-                    atkTextColor));
+            if (Parent.CurrentMap!.PlayerFOV.CurrentFOV.Contains(Parent.Position))
+            {
+                var prefixWord = GeneratePrefixWord();
+                Engine.GameScreen?.MessageLog.AddMessage(
+                    new ColoredString($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.",
+                        atkTextColor));
+            }
+
             target.HP -= damage;
 
             target.LastHit = Parent;
@@ -190,7 +200,12 @@ internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBu
         }
         else
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor));
+            if (Parent.CurrentMap!.PlayerFOV.CurrentFOV.Contains(Parent.Position))
+            {
+                Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"{attackDesc} but does no damage.",
+                    atkTextColor));
+            }
+
             target.LastHit = Parent;
             if (target.LastHit != Engine.Player) return;
             var aimless = Parent.AllComponents.GetFirstOrDefault<AimlessAI>();
@@ -218,7 +233,7 @@ internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBu
 
     public bool OnBumped(RogueLikeEntity source)
     {
-        var combatant = source.AllComponents.GetFirstOrDefault<CombatantComponant>();
+        var combatant = source.AllComponents.GetFirstOrDefault<CombatantComponent>();
         if (combatant == null) return false;
 
         combatant.Attack(this);

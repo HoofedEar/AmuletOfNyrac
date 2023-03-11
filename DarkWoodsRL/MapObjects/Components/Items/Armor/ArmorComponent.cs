@@ -21,7 +21,7 @@ public class ArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IArmor
         if (IsEquipped) return false;
         if (Parent != null) Parent.Name += " (e)";
         IsEquipped = true;
-        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponant>().END += ENDMod;
+        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponent>().END += ENDMod;
         Engine.GameScreen?.MessageLog.AddMessage(new(
             $"You donned the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));
@@ -33,7 +33,7 @@ public class ArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IArmor
         if (!IsEquipped) return false;
         if (Parent != null) Parent.Name = Parent.Name.Replace(" (e)", "");
         IsEquipped = false;
-        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponant>().END -= ENDMod;
+        Engine.Player.AllComponents.GetFirst<Combatant.CombatantComponent>().END -= ENDMod;
         Engine.GameScreen?.MessageLog.AddMessage(new(
             $"You removed the {Parent?.Name.Replace(" (e)", "")}.",
             MessageColors.ItemPickedUpAppearance));

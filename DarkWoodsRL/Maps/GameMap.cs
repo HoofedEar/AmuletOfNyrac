@@ -90,7 +90,7 @@ public class GameMap : RogueLikeMap
     {
         if (e.Item != Engine.Player)
         {
-            var combatant = e.Item.GoRogueComponents.GetFirstOrDefault<CombatantComponant>();
+            var combatant = e.Item.GoRogueComponents.GetFirstOrDefault<CombatantComponent>();
             if (combatant == null) return;
 
             combatant.Died += HostileDeath;
@@ -101,7 +101,7 @@ public class GameMap : RogueLikeMap
     {
         if (e.Item != Engine.Player)
         {
-            var combatant = e.Item.GoRogueComponents.GetFirstOrDefault<CombatantComponant>();
+            var combatant = e.Item.GoRogueComponents.GetFirstOrDefault<CombatantComponent>();
             if (combatant == null) return;
 
             combatant.Died -= HostileDeath;
@@ -110,15 +110,25 @@ public class GameMap : RogueLikeMap
 
     private static void HostileDeath(object? s, EventArgs e)
     {
-        var hostile = ((CombatantComponant)s!).Parent!;
+        var hostile = ((CombatantComponent)s!).Parent!;
 
         // Display message in log
-        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!",
-            MessageColors.EnemyDiedAppearance));
+        if (!hostile.CurrentMap!.PlayerFOV.CurrentFOV.Contains(hostile.Position))
+        {
+            Engine.GameScreen?.MessageLog.AddMessage(
+                new ColoredString($"You hear something die nearby.",
+                    MessageColors.ImpossibleActionAppearance));
+        }
+        else
+        {
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!",
+                MessageColors.EnemyDiedAppearance));
+        }
         
-        var combatant = hostile.AllComponents.GetFirst<CombatantComponant>();
+        
+        var combatant = hostile.AllComponents.GetFirst<CombatantComponent>();
         if (combatant.LastHit == Engine.Player)
-            Engine.Player.AllComponents.GetFirst<CombatantComponant>().Xp += combatant.ProvidedXp;
+            Engine.Player.AllComponents.GetFirst<CombatantComponent>().Xp += combatant.ProvidedXp;
 
         // Switch entity for corpse
         var map = hostile.CurrentMap!;

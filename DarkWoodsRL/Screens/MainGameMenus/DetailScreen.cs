@@ -21,7 +21,7 @@ public class DetailScreen : MainGameMenu
         Title = item.Name.Replace(" (e)", "");
         var playerInventory = Engine.Player.AllComponents.GetFirst<InventoryComponent>();
 
-        ItemType = new Label("Type: Weapon")
+        ItemType = new Label(28)
         {
             Position = (1, 1)
         };
@@ -29,7 +29,7 @@ public class DetailScreen : MainGameMenu
 
         for (var i = 0; i < Details.Count; i++)
         {
-            Details[i].Position = (1, 2 + i);
+            Details[i].Position = (1, 3 + i);
             Controls.Add(Details[i]);
         }
 

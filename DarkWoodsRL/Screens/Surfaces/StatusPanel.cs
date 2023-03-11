@@ -33,34 +33,34 @@ internal class StatusPanel : ControlsConsole
 
         // Add HP bar to controls, and ensure HP bar updates when the player's health changes
         Controls.Add(HPBar);
-        Engine.Player.AllComponents.GetFirst<CombatantComponant>().HPChanged += OnPlayerHPChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponent>().HPChanged += OnPlayerHPChanged;
         UpdateHPBar();
 
         STRStat = new Label("STR 00")
         {
-            Position = (1, 1)
+            Position = (1, 2)
         };
-        Engine.Player.AllComponents.GetFirst<CombatantComponant>().STRChanged += OnPlayerStatsChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponent>().STRChanged += OnPlayerStatsChanged;
         Controls.Add(STRStat);
 
         DEXStat = new Label("DEX 10")
         {
-            Position = (1, 2)
+            Position = (8, 2)
         };
-        Engine.Player.AllComponents.GetFirst<CombatantComponant>().DEXChanged += OnPlayerStatsChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponent>().DEXChanged += OnPlayerStatsChanged;
         Controls.Add(DEXStat);
 
         ENDStat = new Label("END 10")
         {
             Position = (1, 3)
         };
-        Engine.Player.AllComponents.GetFirst<CombatantComponant>().ENDChanged += OnPlayerStatsChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponent>().ENDChanged += OnPlayerStatsChanged;
         Controls.Add(ENDStat);
         UpdateStats();
 
         GoldAmount = new Label("$:0   ")
         {
-            Position = (9, 2)
+            Position = (8, 3)
         };
         Engine.Player.AllComponents.GetFirst<InventoryComponent>().GoldChanged += OnPlayerGoldChanged;
         Controls.Add(GoldAmount);
@@ -89,14 +89,14 @@ internal class StatusPanel : ControlsConsole
 
     private void UpdateHPBar()
     {
-        var combatant = Engine.Player.AllComponents.GetFirst<CombatantComponant>();
+        var combatant = Engine.Player.AllComponents.GetFirst<CombatantComponent>();
         HPBar.DisplayText = $"HP: {combatant.HP} / {combatant.MaxHP}";
         HPBar.Progress = (float) combatant.HP / combatant.MaxHP;
     }
 
     private void UpdateStats()
     {
-        var combatant = Engine.Player.AllComponents.GetFirst<CombatantComponant>();
+        var combatant = Engine.Player.AllComponents.GetFirst<CombatantComponent>();
         var baseSTR = combatant.STR;
         var baseDEX = combatant.DEX;
         var baseEND = combatant.END;

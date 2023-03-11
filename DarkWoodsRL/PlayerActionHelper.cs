@@ -38,7 +38,7 @@ internal static class PlayerActionHelper
 
         // The player completed their turn by successfully taking an action; but if they somehow died in the process,
         // we'll just return because the Engine's death handlers will be dealing with the situation.
-        if (Engine.Player.AllComponents.GetFirst<CombatantComponant>().HP <= 0) return;
+        if (Engine.Player.AllComponents.GetFirst<CombatantComponent>().HP <= 0) return;
 
         // Otherwise, have the enemies take their turns.
         (Engine.Player.CurrentMap as GameMap)!.TakeEnemyTurns();

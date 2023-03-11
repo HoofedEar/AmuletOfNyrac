@@ -6,6 +6,8 @@ using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;
 using ShaiRandom.Generators;
 
+// ReSharper disable SuggestBaseTypeForParameter
+
 namespace DarkWoodsRL.Maps;
 
 /// <summary>
@@ -20,7 +22,7 @@ internal static class Factory
     private const int MaxMonstersPerRoom = 2;
     private const int MaxPotionsPerRoom = 4;
 
-    public static int CurrentDungeonLevel = 0;
+    public static int CurrentDungeonDepth = 1;
 
     public static (GameMap map, Point playerSpawn) Dungeon()
     {
@@ -54,10 +56,11 @@ internal static class Factory
         SpawnPotions(map, rooms, playerSpawn);
         SpawnStairs(map, rooms, playerSpawn);
 
-        switch (CurrentDungeonLevel)
-        {
-            // Handle spawning different enemies based on the floor
-        }
+        // Handle spawning different enemies based on the floor
+        // switch (CurrentDungeonLevel)
+        // {
+        //     
+        // }
 
         return (map, playerSpawn);
     }
@@ -92,58 +95,64 @@ internal static class Factory
         // Generate between zero and the max potions per room.
         foreach (var room in rooms.Items)
         {
-            int potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
-            for (int i = 0; i < potions; i++)
+            var potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
+            for (var i = 0; i < potions; i++)
             {
                 var type = GlobalRandom.DefaultRNG.NextInt(0, 6);
                 switch (type)
                 {
                     case 0:
                     {
-                        var potion = MapObjects.Items.Other.Honeycomb();
-                        potion.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(potion);
+                        var e = MapObjects.Items.Other.Honeycomb();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
                         break;
                     }
                     case 1:
                     {
-                        var armor = MapObjects.Items.Weapons.LeatherArmor();
-                        armor.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(armor);
+                        var e = MapObjects.Items.Armor.ChestBarrel();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
                         break;
                     }
                     case 2:
                     {
-                        var weapon = MapObjects.Items.Weapons.Dagger();
-                        weapon.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(weapon);
+                        var e = MapObjects.Items.Weapons.Dagger();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
                         break;
                     }
                     case 3:
                     {
-                        var gold = MapObjects.Items.Other.Gold();
-                        gold.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(gold);
+                        var e = MapObjects.Items.Other.Gold();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
                         break;
                     }
                     case 4:
                     {
-                        var enchantWeapon = MapObjects.Items.Other.ScrollOfEnchantWeapon();
-                        enchantWeapon.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(enchantWeapon);
+                        var e = MapObjects.Items.Other.ScrollOfEnchantWeapon();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
                         break;
                     }
                     case 5:
                     {
-                        var enchantArmor = MapObjects.Items.Other.ScrollOfEnchantArmor();
-                        enchantArmor.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(enchantArmor);
+                        var e = MapObjects.Items.Other.BalloonDog();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
                         break;
                     }
                 }
@@ -173,7 +182,7 @@ internal static class Factory
         {
             var obj = map.GetTerrainAt<Terrain>(t);
             if (obj == null) continue;
-            
+
             var belowPos = obj.Position + Direction.Down;
             if (belowPos.Y > 29) continue;
 

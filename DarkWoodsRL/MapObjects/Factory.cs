@@ -3,7 +3,6 @@ using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Combatant;
 using DarkWoodsRL.Maps;
 using DarkWoodsRL.Screens.MainGameMenus;
-using DarkWoodsRL.Themes;
 using SadConsole;
 using SadConsole.Input;
 using SadRogue.Integration;
@@ -63,7 +62,7 @@ public static class Factory
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
         motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift),
-            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<LevelHandlerComponent>().Descend()));
+            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<DepthHandlerComponent>().Descend()));
 
         // Add controls for picking up items and getting to inventory screen.
         motionControl.SetAction(Keys.Space,
@@ -78,11 +77,11 @@ public static class Factory
         player.AllComponents.Add(new PlayerFOVController {FOVRadius = 6});
 
         // Player combatant
-        player.AllComponents.Add(new CombatantComponant(10, 2, 5, 5));
+        player.AllComponents.Add(new CombatantComponent(10, 2, 5, 5));
 
         // Player inventory
         player.AllComponents.Add(new InventoryComponent(26));
-        player.AllComponents.Add(new LevelHandlerComponent());
+        player.AllComponents.Add(new DepthHandlerComponent());
 
 
         return player;

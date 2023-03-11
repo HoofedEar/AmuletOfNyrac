@@ -6,6 +6,7 @@ using DarkWoodsRL.MapObjects.Components.Items.Armor;
 using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 using DarkWoodsRL.MapObjects.Components.Items.Weapon;
 using DarkWoodsRL.Themes;
+using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 
@@ -20,6 +21,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
     private int _gold;
 
     public readonly List<RogueLikeEntity> Items;
+
     public int Gold
     {
         get => _gold;
@@ -58,7 +60,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
         Parent.CurrentMap.AddEntity(item);
 
         if (Parent == Engine.Player)
-            Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.",
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"You dropped {item.Name}.",
                 MessageColors.ItemDroppedAppearance));
     }
 
@@ -85,16 +87,18 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
                 var terrain = Parent.CurrentMap.GetTerrainAt<Terrain>(Parent.Position);
                 if (terrain is {Appearance.Glyph: 240})
                 {
-                    Parent.AllComponents.GetFirst<LevelHandlerComponent>().Descend();
+                    Parent.AllComponents.GetFirst<DepthHandlerComponent>().Descend();
                     return false;
                 }
+
                 continue;
             }
+
             var gold = item.AllComponents.GetFirstOrDefault<GoldComponent>();
             if (inventory.Items.Count >= inventory.Capacity && gold == null)
             {
                 if (isPlayer)
-                    Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full.",
+                    Engine.GameScreen?.MessageLog.AddMessage(new ColoredString("Your inventory is full.",
                         MessageColors.ImpossibleActionAppearance));
                 return false;
             }
@@ -104,7 +108,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
             {
                 Gold += gold.Value;
                 if (isPlayer)
-                    Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up {gold.Value} Gold.",
+                    Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"You picked up {gold.Value} Gold.",
                         MessageColors.ItemPickedUpAppearance));
 
                 return true;
@@ -113,7 +117,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
             inventory.Items.Add(item);
 
             if (isPlayer)
-                Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up {item.Name}.",
+                Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"You picked up {item.Name}.",
                     MessageColors.ItemPickedUpAppearance));
 
             return true;
@@ -153,7 +157,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
         var idx = Items.FindIndex(i => i == item);
         if (idx == -1)
             throw new ArgumentException("Tried to equip an equipment that was not in the inventory.");
-        
+
         if (weapon.IsEquipped)
         {
             Engine.GameScreen?.MessageLog.AddMessage(new(
@@ -175,7 +179,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
         var result = weapon.Equip();
         return result;
     }
-    
+
     public bool EquipArmor(RogueLikeEntity item)
     {
         if (Parent == null)
@@ -192,7 +196,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
                 MessageColors.ImpossibleActionAppearance));
             return false;
         }
-        
+
         // Unequip all other weapons
         var alreadyEquipped = Items.Where(i => i.AllComponents.Contains<ArmorComponent>()).ToList();
         if (alreadyEquipped.Count > 0)
