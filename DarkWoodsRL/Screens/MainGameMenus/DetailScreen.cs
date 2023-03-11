@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.MapObjects.Components.Items.Armor;
+using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 using DarkWoodsRL.MapObjects.Components.Items.Weapon;
 using SadConsole;
 using SadConsole.UI.Controls;
@@ -18,7 +19,7 @@ public class DetailScreen : MainGameMenu
     public DetailScreen(RogueLikeEntity item, int type) : base(30, 11)
     {
         Title = item.Name.Replace(" (e)", "");
-        var playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
+        var playerInventory = Engine.Player.AllComponents.GetFirst<InventoryComponent>();
 
         ItemType = new Label("Type: Weapon")
         {
@@ -61,7 +62,7 @@ public class DetailScreen : MainGameMenu
         }
     }
 
-    private void Drop(object? sender, EventArgs args, RogueLikeEntity item, Inventory inv)
+    private void Drop(object? sender, EventArgs args, RogueLikeEntity item, InventoryComponent inv)
     {
         Game.Instance.Screen.Children[^2].IsVisible = false;
         Hide();
@@ -73,7 +74,7 @@ public class DetailScreen : MainGameMenu
         });
     }
 
-    private void Use(object? sender, EventArgs args, RogueLikeEntity item, int type, Inventory playerInventory)
+    private void Use(object? sender, EventArgs args, RogueLikeEntity item, int type, InventoryComponent playerInventoryComponent)
     {
         switch (type)
         {
@@ -82,7 +83,7 @@ public class DetailScreen : MainGameMenu
                 var consumable = item.AllComponents.GetFirstOrDefault<IConsumable>();
                 if (consumable != null)
                 {
-                    PlayerActionHelper.PlayerTakeAction(_ => playerInventory.Consume(item));
+                    PlayerActionHelper.PlayerTakeAction(_ => playerInventoryComponent.Consume(item));
                 }
 
                 Game.Instance.Screen.Children[^2].IsVisible = false;
@@ -94,13 +95,13 @@ public class DetailScreen : MainGameMenu
                 var weapon = item.AllComponents.GetFirstOrDefault<IWeapon>();
                 if (weapon != null)
                 {
-                    PlayerActionHelper.PlayerTakeAction(_ => playerInventory.EquipWeapon(item));
+                    PlayerActionHelper.PlayerTakeAction(_ => playerInventoryComponent.EquipWeapon(item));
                 }
 
                 var armor = item.AllComponents.GetFirstOrDefault<IArmor>();
                 if (armor != null)
                 {
-                    PlayerActionHelper.PlayerTakeAction(_ => playerInventory.EquipArmor(item));
+                    PlayerActionHelper.PlayerTakeAction(_ => playerInventoryComponent.EquipArmor(item));
                 }
 
                 Game.Instance.Screen.Children[^2].IsVisible = false;

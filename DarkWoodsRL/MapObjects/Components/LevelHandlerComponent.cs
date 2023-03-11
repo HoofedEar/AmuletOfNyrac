@@ -8,9 +8,9 @@ using SadRogue.Primitives;
 
 namespace DarkWoodsRL.MapObjects.Components;
 
-public class LevelHandler : RogueLikeComponentBase<RogueLikeEntity>
+public class LevelHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
 {
-    public LevelHandler() : base(false, false, false, false)
+    public LevelHandlerComponent() : base(false, false, false, false)
     {
     }
 
@@ -61,7 +61,7 @@ public class LevelHandler : RogueLikeComponentBase<RogueLikeEntity>
         return false;
     }
 
-    private void DefaultMap()
+    public static void DefaultMap()
     {
         var floor = Factory.AppearanceDefinitions.First(f => f.Key == "Floor").Value;
         floor.Light.Foreground = Color.DarkGray;

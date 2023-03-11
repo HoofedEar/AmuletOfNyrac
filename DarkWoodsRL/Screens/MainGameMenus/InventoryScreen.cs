@@ -27,7 +27,7 @@ internal class ListItem
 /// </summary>
 internal class InventoryScreen : MainGameMenu
 {
-    private readonly Inventory _playerInventory;
+    private readonly InventoryComponent _playerInventoryComponent;
     private readonly ListBox? _itemList;
 
     public InventoryScreen()
@@ -35,8 +35,8 @@ internal class InventoryScreen : MainGameMenu
     {
         Title = "Inventory";
 
-        _playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
-        if (_playerInventory.Items.Count == 0)
+        _playerInventoryComponent = Engine.Player.AllComponents.GetFirst<InventoryComponent>();
+        if (_playerInventoryComponent.Items.Count == 0)
         {
             PrintTextAtCenter("No items in your inventory.");
             return;
@@ -45,7 +45,7 @@ internal class InventoryScreen : MainGameMenu
         // Find any consumable items and add them to a ListBox
         _itemList = new ListBox(Width - 2, Height - 2) {Position = (1, 1), SingleClickItemExecute = true};
 
-        foreach (var item in _playerInventory.Items)
+        foreach (var item in _playerInventoryComponent.Items)
         {
             _itemList.Items.Add(new ListItem {Item = item});
         }

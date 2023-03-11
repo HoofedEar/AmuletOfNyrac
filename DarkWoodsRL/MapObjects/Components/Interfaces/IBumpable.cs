@@ -1,6 +1,6 @@
 ﻿using SadRogue.Integration;
 
-namespace DarkWoodsRL.MapObjects.Components;
+namespace DarkWoodsRL.MapObjects.Components.Interfaces;
 
 /// <summary>
 /// Interface implemented by any components that react to bumps.

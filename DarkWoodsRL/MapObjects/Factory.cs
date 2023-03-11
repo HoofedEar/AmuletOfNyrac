@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DarkWoodsRL.MapObjects.Components;
+using DarkWoodsRL.MapObjects.Components.Combatant;
 using DarkWoodsRL.Maps;
 using DarkWoodsRL.Screens.MainGameMenus;
 using DarkWoodsRL.Themes;
@@ -62,11 +63,11 @@ public static class Factory
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
         motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift),
-            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<LevelHandler>().Descend()));
+            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<LevelHandlerComponent>().Descend()));
 
         // Add controls for picking up items and getting to inventory screen.
         motionControl.SetAction(Keys.Space,
-            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
+            () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<InventoryComponent>().PickUp()));
         motionControl.SetAction(Keys.E, () => Game.Instance.Screen.Children.Add(new InventoryScreen()));
         
         motionControl.SetAction(Keys.Escape, () => Game.Instance.Screen.Children.Add(new PauseView()));
@@ -77,42 +78,13 @@ public static class Factory
         player.AllComponents.Add(new PlayerFOVController {FOVRadius = 6});
 
         // Player combatant
-        player.AllComponents.Add(new Combatant(30, 2, 5, 10));
+        player.AllComponents.Add(new CombatantComponant(10, 2, 5, 5));
 
         // Player inventory
-        player.AllComponents.Add(new Inventory(26));
-        player.AllComponents.Add(new LevelHandler());
+        player.AllComponents.Add(new InventoryComponent(26));
+        player.AllComponents.Add(new LevelHandlerComponent());
 
 
         return player;
-    }
-
-    public static RogueLikeEntity Orc()
-    {
-        var enemy = new RogueLikeEntity(MainPalette.Sage, Color.Black, 'o', false, layer: (int) GameMap.Layer.Monsters)
-        {
-            Name = "Orc"
-        };
-
-        // Add AI component to bump action toward the player if the player is in view
-        enemy.AllComponents.Add(new HostileAI());
-        enemy.AllComponents.Add(new Combatant(10, 0, 3));
-
-        return enemy;
-    }
-
-    public static RogueLikeEntity Troll()
-    {
-        var enemy = new RogueLikeEntity(MainPalette.LightGray, Color.Black, 'T', false,
-            layer: (int) GameMap.Layer.Monsters)
-        {
-            Name = "Troll"
-        };
-
-        // Add AI component to bump action toward the player if the player is in view
-        enemy.AllComponents.Add(new HostileAI());
-        enemy.AllComponents.Add(new Combatant(16, 1, 4, combatVerb: "tries to bludgeon"));
-
-        return enemy;
     }
 }

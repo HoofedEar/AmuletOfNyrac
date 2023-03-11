@@ -1,6 +1,6 @@
 ﻿using SadRogue.Integration;
 
-namespace DarkWoodsRL.MapObjects.Components.Items;
+namespace DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 
 /// <summary>
 /// Implemented by things that can be consumed.

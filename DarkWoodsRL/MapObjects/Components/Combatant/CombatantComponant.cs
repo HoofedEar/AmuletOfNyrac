@@ -1,11 +1,14 @@
 ﻿using System;
+using DarkWoodsRL.MapObjects.Components.EnemyAI;
+using DarkWoodsRL.MapObjects.Components.Interfaces;
 using DarkWoodsRL.Themes;
 using GoRogue.DiceNotation;
 using GoRogue.Random;
+using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 
-namespace DarkWoodsRL.MapObjects.Components;
+namespace DarkWoodsRL.MapObjects.Components.Combatant;
 
 /// <summary>
 /// Component for entities that allows them to engage in combat.
@@ -16,7 +19,7 @@ namespace DarkWoodsRL.MapObjects.Components;
 /// Endurance determines how much damage is resisted when they take damage.
 /// Dexterity determines how often they are successful when attempting to hit something.
 /// </remarks>
-internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
+internal class CombatantComponant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
 {
     private int _hp;
     private int _str;
@@ -77,17 +80,53 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     public event EventHandler? HPChanged;
     public event EventHandler? Died;
 
-    public int MaxHP { get; }
-    public string CombatVerb;
+    public int MaxHP { get; private set; }
+    private readonly string _combatVerb;
 
-    public Combatant(int hp, int endurance, int strength, int dexterity = 3, string combatVerb = "swings at")
+    public int Xp
+    {
+        get => _xp;
+        set
+        {
+            _xp = value;
+            XpChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public event EventHandler? XpChanged;
+
+    private int _xp; // Current XP
+    private int _lvl; // Current LVL
+    private int _nextXp; // Required XP for next LVL
+    public readonly int ProvidedXp; // XP given when killed
+    public RogueLikeEntity? LastHit;
+
+    public CombatantComponant(int hp, int endurance, int strength, int dexterity = 3, string combatVerb = "swings at",
+        int xp = 10)
         : base(false, false, false, false)
     {
         HP = MaxHP = hp;
         END = endurance;
         STR = strength;
         DEX = dexterity;
-        CombatVerb = combatVerb;
+        _combatVerb = combatVerb;
+        ProvidedXp = xp;
+        _lvl = 1;
+        _nextXp = (int) Math.Pow(5 * _lvl, 2);
+        XpChanged += CheckXp;
+    }
+
+    private void CheckXp(object? sender, EventArgs e)
+    {
+        if (_xp < _nextXp) return;
+        // Level Up!
+        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString(
+            $"You leveled up!",
+            MessageColors.HealthRecoveredAppearance));
+        _lvl += 1;
+        MaxHP += GlobalRandom.DefaultRNG.NextInt(2, 11);
+        HPChanged?.Invoke(this, EventArgs.Empty);
+        _nextXp = (int) Math.Pow(5 * _lvl, 2);
     }
 
     public int Heal(int amount)
@@ -104,19 +143,28 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     /// 20 - the attackers level - the defenders armor. If the attack is greater or equal to the defense, the attack succeeded.
     /// </summary>
     /// <param name="target"></param>
-    private void Attack(Combatant target)
+    private void Attack(CombatantComponant target)
     {
         var roll = Dice.Roll("1d20");
         var result = Parent == Engine.Player ? roll + DEX + 2 : roll + DEX;
         var atkTextColor = Parent == Engine.Player
             ? MessageColors.PlayerAtkAppearance
             : MessageColors.EnemyAtkAtkAppearance;
-        var attackDesc = $"{Parent!.Name} {CombatVerb} {target.Parent!.Name}";
+        var attackDesc = $"{Parent!.Name} {_combatVerb} {target.Parent!.Name}";
 
         if (result <= Dice.Roll("1d20") + target.END)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{Parent!.Name} {CombatVerb} {target.Parent!.Name} but misses.",
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString(
+                $"{Parent!.Name} {_combatVerb} {target.Parent!.Name} but misses.",
                 atkTextColor));
+            target.LastHit = Parent;
+            if (target.LastHit != Engine.Player) return;
+            var aimless = target.Parent.AllComponents.GetFirstOrDefault<AimlessAI>();
+            if (aimless is {IsAngry: false})
+            {
+                aimless.IsAngry = true;
+            }
+
             return;
         }
 
@@ -125,16 +173,37 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         if (damage > 0)
         {
             var prefixWord = GeneratePrefixWord();
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.", atkTextColor));
+            Engine.GameScreen?.MessageLog.AddMessage(
+                new ColoredString($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.",
+                    atkTextColor));
             target.HP -= damage;
+
+            target.LastHit = Parent;
+            if (target.LastHit != Engine.Player) return;
+
+            // Make AimlessAI angry
+            var aimless = target.Parent.AllComponents.GetFirstOrDefault<AimlessAI>();
+            if (aimless is {IsAngry: false})
+            {
+                aimless.IsAngry = true;
+            }
         }
         else
+        {
             Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor));
+            target.LastHit = Parent;
+            if (target.LastHit != Engine.Player) return;
+            var aimless = Parent.AllComponents.GetFirstOrDefault<AimlessAI>();
+            if (aimless is {IsAngry: false})
+            {
+                aimless.IsAngry = true;
+            }
+        }
     }
 
     private string GeneratePrefixWord()
     {
-        return GlobalRandom.DefaultRNG.NextInt(0, 6) switch
+        return GlobalRandom.DefaultRNG.NextInt(0, 7) switch
         {
             0 => "BAM!",
             1 => "BOINK!",
@@ -142,13 +211,14 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
             3 => "SPLAT!",
             4 => "KAPOW!",
             5 => "WHAM!",
+            6 => "SLAM!",
             _ => "CRACK!"
         };
     }
 
     public bool OnBumped(RogueLikeEntity source)
     {
-        var combatant = source.AllComponents.GetFirstOrDefault<Combatant>();
+        var combatant = source.AllComponents.GetFirstOrDefault<CombatantComponant>();
         if (combatant == null) return false;
 
         combatant.Attack(this);

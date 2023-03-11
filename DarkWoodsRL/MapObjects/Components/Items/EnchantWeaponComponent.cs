@@ -1,3 +1,4 @@
+using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 using DarkWoodsRL.MapObjects.Components.Items.Weapon;
 using DarkWoodsRL.Themes;
 using SadRogue.Integration;
@@ -16,7 +17,7 @@ public class EnchantWeaponComponent : RogueLikeComponentBase<RogueLikeEntity>, I
         var isPlayer = consumer == Engine.Player;
         var used = false;
         var maxEnch = false;
-        var inventory = consumer.AllComponents.GetFirst<Inventory>();
+        var inventory = consumer.AllComponents.GetFirst<InventoryComponent>();
         RogueLikeEntity? enchanted = null;
         foreach (var item in inventory.Items)
         {
@@ -37,6 +38,10 @@ public class EnchantWeaponComponent : RogueLikeComponentBase<RogueLikeEntity>, I
             weapon.EnchantLvl += 1;
             weapon.STRMod += 1;
             weapon.DEXMod += 1;
+            // have to adjust the players value live too
+            var combat = consumer.AllComponents.GetFirst<Combatant.CombatantComponant>();
+            combat.STR += 1;
+            combat.DEX += 1;
             if (weapon.Parent != null)
                 weapon.Parent.Name = "+" + weapon.EnchantLvl + " " + weapon.Parent.Name.Replace("+" + prev + " ", "");
             used = true;

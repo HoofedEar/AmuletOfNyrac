@@ -1,5 +1,6 @@
 ﻿using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Items;
+using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 using SadConsole.UI.Controls;
 using SadRogue.Integration;
 
@@ -10,15 +11,15 @@ namespace DarkWoodsRL.Screens.MainGameMenus;
 /// </summary>
 internal class ConsumeScreen : MainGameMenu
 {
-    private readonly Inventory _playerInventory;
+    private readonly InventoryComponent _playerInventoryComponent;
 
     public ConsumeScreen()
         : base(51, 15)
     {
         Title = "Select an item to consume:";
 
-        _playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
-        if (_playerInventory.Items.Count == 0)
+        _playerInventoryComponent = Engine.Player.AllComponents.GetFirst<InventoryComponent>();
+        if (_playerInventoryComponent.Items.Count == 0)
         {
             PrintTextAtCenter("There are no items in your inventory.");
             return;
@@ -28,7 +29,7 @@ internal class ConsumeScreen : MainGameMenu
         bool foundItem = false;
         var list = new ListBox(Width - 2, Height - 2) { Position = (1, 1), SingleClickItemExecute = true };
 
-        foreach (var item in _playerInventory.Items)
+        foreach (var item in _playerInventoryComponent.Items)
         {
             var consumable = item.AllComponents.GetFirstOrDefault<IConsumable>();
             if (consumable == null) continue;
@@ -51,6 +52,6 @@ internal class ConsumeScreen : MainGameMenu
         Hide();
 
         var item = ((ListItem)e.Item).Item;
-        PlayerActionHelper.PlayerTakeAction(_ => _playerInventory.Consume(item));
+        PlayerActionHelper.PlayerTakeAction(_ => _playerInventoryComponent.Consume(item));
     }
 }

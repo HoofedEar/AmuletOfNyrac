@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DarkWoodsRL.MapObjects;
+﻿using DarkWoodsRL.MapObjects;
 using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
@@ -80,9 +77,9 @@ internal static class Factory
             int enemies = GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + 1);
             for (int i = 0; i < enemies; i++)
             {
-                bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
+                var isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
 
-                var enemy = isOrc ? MapObjects.Factory.Orc() : MapObjects.Factory.Troll();
+                var enemy = isOrc ? MapObjects.Enemies.Aggressive.Orc() : MapObjects.Enemies.Aggressive.Troll();
                 enemy.Position =
                     GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                 map.AddEntity(enemy);
@@ -176,19 +173,25 @@ internal static class Factory
         {
             var obj = map.GetTerrainAt<Terrain>(t);
             if (obj == null) continue;
-
-            var x = obj.Position.X;
-            var y = obj.Position.Y;
-
-            var pos = new Point(x, y);
-            var belowPos = pos + Direction.Down;
+            
+            var belowPos = obj.Position + Direction.Down;
             if (belowPos.Y > 29) continue;
 
             var below = map.GetTerrainAt<Terrain>(belowPos);
-            if (below is not {Appearance.Glyph: 46} || obj is not {Appearance.Glyph: 177}) continue;
-            obj.DarkAppearance.Glyph = 128;
-            obj.Appearance.Glyph = 128;
-            obj.TrueAppearance.CopyAppearanceFrom(obj.Appearance);
+            if (below is not {Appearance.Glyph: 46}) continue;
+            switch (obj)
+            {
+                case {Appearance.Glyph: 177}:
+                    obj.DarkAppearance.Glyph = 128;
+                    obj.Appearance.Glyph = 128;
+                    obj.TrueAppearance.CopyAppearanceFrom(obj.Appearance);
+                    break;
+                case {Appearance.Glyph: 178}:
+                    obj.DarkAppearance.Glyph = 130;
+                    obj.Appearance.Glyph = 130;
+                    obj.TrueAppearance.CopyAppearanceFrom(obj.Appearance);
+                    break;
+            }
         }
     }
 }

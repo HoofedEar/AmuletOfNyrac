@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DarkWoodsRL.MapObjects.Components.Items;
 using DarkWoodsRL.MapObjects.Components.Items.Armor;
+using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 using DarkWoodsRL.MapObjects.Components.Items.Weapon;
 using DarkWoodsRL.Themes;
 using SadRogue.Integration;
@@ -13,13 +14,13 @@ namespace DarkWoodsRL.MapObjects.Components;
 /// <summary>
 /// Component representing an inventory which can hold a given number of items.
 /// </summary>
-internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
+internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
 {
     private int Capacity { get; }
-    public int _gold;
+    private int _gold;
 
     public readonly List<RogueLikeEntity> Items;
-    public int GOLD
+    public int Gold
     {
         get => _gold;
         set
@@ -31,7 +32,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 
     public event EventHandler? GoldChanged;
 
-    public Inventory(int capacity)
+    public InventoryComponent(int capacity)
         : base(false, false, false, false)
     {
         Capacity = capacity;
@@ -76,7 +77,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 
         var isPlayer = Parent == Engine.Player;
 
-        var inventory = Parent.AllComponents.GetFirst<Inventory>();
+        var inventory = Parent.AllComponents.GetFirst<InventoryComponent>();
         foreach (var item in Parent.CurrentMap.GetEntitiesAt<RogueLikeEntity>(Parent.Position))
         {
             if (!item.AllComponents.Contains<ICarryable>())
@@ -84,7 +85,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
                 var terrain = Parent.CurrentMap.GetTerrainAt<Terrain>(Parent.Position);
                 if (terrain is {Appearance.Glyph: 240})
                 {
-                    Parent.AllComponents.GetFirst<LevelHandler>().Descend();
+                    Parent.AllComponents.GetFirst<LevelHandlerComponent>().Descend();
                     return false;
                 }
                 continue;
@@ -101,7 +102,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             item.CurrentMap!.RemoveEntity(item);
             if (gold != null)
             {
-                GOLD += gold.Value;
+                Gold += gold.Value;
                 if (isPlayer)
                     Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up {gold.Value} Gold.",
                         MessageColors.ItemPickedUpAppearance));

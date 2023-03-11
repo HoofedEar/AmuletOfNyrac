@@ -1,3 +1,4 @@
+using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
 using GoRogue.Random;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;

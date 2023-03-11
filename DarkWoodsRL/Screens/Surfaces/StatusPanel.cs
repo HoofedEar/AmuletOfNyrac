@@ -1,5 +1,6 @@
 ﻿using System;
 using DarkWoodsRL.MapObjects.Components;
+using DarkWoodsRL.MapObjects.Components.Combatant;
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
@@ -32,28 +33,28 @@ internal class StatusPanel : ControlsConsole
 
         // Add HP bar to controls, and ensure HP bar updates when the player's health changes
         Controls.Add(HPBar);
-        Engine.Player.AllComponents.GetFirst<Combatant>().HPChanged += OnPlayerHPChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponant>().HPChanged += OnPlayerHPChanged;
         UpdateHPBar();
 
         STRStat = new Label("STR 00")
         {
             Position = (1, 1)
         };
-        Engine.Player.AllComponents.GetFirst<Combatant>().STRChanged += OnPlayerStatsChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponant>().STRChanged += OnPlayerStatsChanged;
         Controls.Add(STRStat);
 
         DEXStat = new Label("DEX 10")
         {
             Position = (1, 2)
         };
-        Engine.Player.AllComponents.GetFirst<Combatant>().DEXChanged += OnPlayerStatsChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponant>().DEXChanged += OnPlayerStatsChanged;
         Controls.Add(DEXStat);
 
         ENDStat = new Label("END 10")
         {
             Position = (1, 3)
         };
-        Engine.Player.AllComponents.GetFirst<Combatant>().ENDChanged += OnPlayerStatsChanged;
+        Engine.Player.AllComponents.GetFirst<CombatantComponant>().ENDChanged += OnPlayerStatsChanged;
         Controls.Add(ENDStat);
         UpdateStats();
 
@@ -61,7 +62,7 @@ internal class StatusPanel : ControlsConsole
         {
             Position = (9, 2)
         };
-        Engine.Player.AllComponents.GetFirst<Inventory>().GoldChanged += OnPlayerGoldChanged;
+        Engine.Player.AllComponents.GetFirst<InventoryComponent>().GoldChanged += OnPlayerGoldChanged;
         Controls.Add(GoldAmount);
     }
 
@@ -82,20 +83,20 @@ internal class StatusPanel : ControlsConsole
 
     private void UpdateGold()
     {
-        var inventory = Engine.Player.AllComponents.GetFirst<Inventory>();
-        GoldAmount.DisplayText = $"$:" + inventory.GOLD;
+        var inventory = Engine.Player.AllComponents.GetFirst<InventoryComponent>();
+        GoldAmount.DisplayText = $"$:" + inventory.Gold;
     }
 
     private void UpdateHPBar()
     {
-        var combatant = Engine.Player.AllComponents.GetFirst<Combatant>();
+        var combatant = Engine.Player.AllComponents.GetFirst<CombatantComponant>();
         HPBar.DisplayText = $"HP: {combatant.HP} / {combatant.MaxHP}";
         HPBar.Progress = (float) combatant.HP / combatant.MaxHP;
     }
 
     private void UpdateStats()
     {
-        var combatant = Engine.Player.AllComponents.GetFirst<Combatant>();
+        var combatant = Engine.Player.AllComponents.GetFirst<CombatantComponant>();
         var baseSTR = combatant.STR;
         var baseDEX = combatant.DEX;
         var baseEND = combatant.END;

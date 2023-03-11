@@ -28,7 +28,7 @@ internal static class Other
         {
             Name = "Honeycomb"
         };
-        honeycomb.AllComponents.Add(new HealingConsumable(4));
+        honeycomb.AllComponents.Add(new HealingConsumableComponent(4));
         honeycomb.AllComponents.Add(new DetailsComponent("Food", new []{"A delicious delicacy."}));
 
         return honeycomb;
@@ -49,7 +49,7 @@ internal static class Other
     {
         var enchantArmor = new RogueLikeEntity(Color.AnsiGreenBright, Color.Black, '?', layer: (int)GameMap.Layer.Items)
         {
-            Name = "Mr. Greenz Will"
+            Name = "Mr. Greenz Wallet"
         };
         enchantArmor.AllComponents.Add(new EnchantArmorComponent());
         enchantArmor.AllComponents.Add(new DetailsComponent("Scroll", new []{"Improves worn armor."}));

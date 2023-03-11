@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using DarkWoodsRL.MapObjects.Components;
+using DarkWoodsRL.MapObjects.Components.Combatant;
 using DarkWoodsRL.Maps;
 using DarkWoodsRL.Screens.Surfaces;
 using DarkWoodsRL.Themes;
@@ -31,8 +32,8 @@ internal class MainGame : ScreenObject
     public MainGame(GameMap map, Point playerSpawn)
     {
         // Center view on player as they move (by default)
-        ViewLock = new SurfaceComponentFollowTarget { Target = Engine.Player };
-        
+        ViewLock = new SurfaceComponentFollowTarget {Target = Engine.Player};
+
         // Set up the map to render
         SetMap(map, playerSpawn);
 
@@ -51,10 +52,11 @@ internal class MainGame : ScreenObject
         };
 
         // Add player death handler
-        Engine.Player.AllComponents.GetFirst<Combatant>().Died += PlayerDeath;
+        Engine.Player.AllComponents.GetFirst<CombatantComponant>().Died += PlayerDeath;
 
         // Write welcome message
-        MessageLog.AddMessage(new("Beware! This castle ruin is filled with dark creatures that seek your blood.", MessageColors.WelcomeTextAppearance));
+        MessageLog.AddMessage(new("Beware! This castle ruin is filled with dark creatures that seek your blood.",
+            MessageColors.WelcomeTextAppearance));
     }
 
     [MemberNotNull(nameof(Map))]
@@ -69,13 +71,13 @@ internal class MainGame : ScreenObject
             Map.SadComponents.Remove(ViewLock);
             Map.Parent = null;
         }
-        
+
         // Set new map to render
         Map = map;
-        
+
         // Create a renderer for the map, specifying viewport size.
         Map.DefaultRenderer = Map.CreateRenderer((Engine.ScreenWidth, Engine.ScreenHeight - BottomPanelHeight));
-        
+
         // Make the Map (which is also a screen object) a child of this screen, and ensure it receives focus.
         Map.Parent = this;
         Map.IsFocused = true;
@@ -93,9 +95,9 @@ internal class MainGame : ScreenObject
     /// </summary>
     private static void PlayerDeath(object? s, EventArgs e)
     {
-        Engine.Player.AllComponents.GetFirst<Combatant>().Died -= PlayerDeath;
+        Engine.Player.AllComponents.GetFirst<CombatantComponant>().Died -= PlayerDeath;
         // Go back to main menu for now
-        Game.Instance.Screen = new MainMenu();
-
+        Game.Instance.Screen = new GameOver("    YOU DIED", Color.DarkRed,
+            Engine.Player.AllComponents.GetFirst<InventoryComponent>().Gold);
     }
 }

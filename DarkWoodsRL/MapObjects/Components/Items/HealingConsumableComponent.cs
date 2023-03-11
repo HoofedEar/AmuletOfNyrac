@@ -1,4 +1,5 @@
-﻿using DarkWoodsRL.Themes;
+﻿using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
+using DarkWoodsRL.Themes;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 
@@ -7,11 +8,11 @@ namespace DarkWoodsRL.MapObjects.Components.Items;
 /// <summary>
 /// Consumable that restores up to the given amount of HP.
 /// </summary>
-internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, IConsumable
+internal class HealingConsumableComponent : RogueLikeComponentBase<RogueLikeEntity>, IConsumable
 {
     public int Amount { get; }
 
-    public HealingConsumable(int amount)
+    public HealingConsumableComponent(int amount)
         : base(false, false, false, false)
     {
         Amount = amount;
@@ -21,7 +22,7 @@ internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, ICon
     {
         var isPlayer = consumer == Engine.Player;
 
-        var combatant = consumer.AllComponents.GetFirst<Combatant>();
+        var combatant = consumer.AllComponents.GetFirst<Combatant.CombatantComponant>();
         var amountRecovered = combatant.Heal(Amount);
         if (amountRecovered > 0)
         {
