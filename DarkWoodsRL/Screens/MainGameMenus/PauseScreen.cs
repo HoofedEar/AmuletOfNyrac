@@ -13,8 +13,7 @@ internal class PauseView : MainGameMenu
         Title = "PAUSED";
         
         var list = new ListBox(Width - 2, Height - 2) {Position = (1, 1), SingleClickItemExecute = true};
-        list.Items.Add("Save Game");
-        list.Items.Add("About");
+        //list.Items.Add("About");
         list.Items.Add("Exit");
         
         Controls.Add(list);

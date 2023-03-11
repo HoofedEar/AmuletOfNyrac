@@ -14,13 +14,13 @@ namespace DarkWoodsRL.Screens;
 public class MainMenu : ControlsConsole
 {
     public MainMenu()
-        : base(16, 10)
+        : base(15, 10)
     {
         // Position controls console
-        Position = (Engine.ScreenWidth / 2 - Width / 2, Engine.ScreenHeight / 2 - Height / 2);
+        Position = ((Engine.ScreenWidth / 2 - Width / 2) - 1, Engine.ScreenHeight / 2 - Height / 2);
 
         // Game Title
-        var title = new Label("Overgrown Tomb")
+        var title = new Label("Amulet of Nyrac")
         {
             Name = "GameTitle",
             TextColor = Color.DarkGreen,

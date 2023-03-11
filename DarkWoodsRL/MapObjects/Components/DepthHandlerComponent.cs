@@ -27,13 +27,13 @@ public class DepthHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
             {
                 // Set map type based on amulets found
                 // if (Maps.Factory.AmuletsFound[0])
-                case > 15:
+                case >= 15:
                     RedMap();
                     break;
-                case > 10:
+                case >= 10:
                     BlueMap();
                     break;
-                case > 5:
+                case >= 5:
                     GreenMap();
                     break;
                 default:
@@ -41,7 +41,7 @@ public class DepthHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
                     break;
             }
 
-            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"You descend the stairs.",
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"You descend the stairs to Depth {Maps.Factory.CurrentDungeonDepth}.",
                 MessageColors.ItemPickedUpAppearance));
             // Generate a dungeon map, spawn enemies, and note player spawn location
             var (map, playerSpawn) = Maps.Factory.Dungeon();

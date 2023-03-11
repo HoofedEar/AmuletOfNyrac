@@ -31,7 +31,7 @@ internal class InventoryScreen : MainGameMenu
     private readonly ListBox? _itemList;
 
     public InventoryScreen()
-        : base(30, 15)
+        : base(32, 15)
     {
         Title = "Inventory";
 

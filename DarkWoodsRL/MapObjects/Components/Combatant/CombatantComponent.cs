@@ -152,16 +152,13 @@ internal class CombatantComponent : RogueLikeComponentBase<RogueLikeEntity>, IBu
             ? MessageColors.PlayerAtkAppearance
             : MessageColors.EnemyAtkAtkAppearance;
         var attackDesc = $"{Parent!.Name} {_combatVerb} {target.Parent!.Name}";
+        if (Parent.AllComponents.Contains<IEnemyAI>() && target.Parent.AllComponents.Contains<IEnemyAI>()) return;
 
         if (result <= Dice.Roll("1d20") + target.END)
         {
-            // If we witness this
-            if (Parent.CurrentMap!.PlayerFOV.CurrentFOV.Contains(Parent.Position))
-            {
-                Engine.GameScreen?.MessageLog.AddMessage(new ColoredString(
-                    $"{Parent!.Name} {_combatVerb} {target.Parent!.Name} but misses.",
-                    atkTextColor));
-            }
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString(
+                $"{Parent!.Name} {_combatVerb} {target.Parent!.Name} but misses.",
+                atkTextColor));
 
             target.LastHit = Parent;
             if (target.LastHit != Engine.Player) return;
@@ -175,20 +172,17 @@ internal class CombatantComponent : RogueLikeComponentBase<RogueLikeEntity>, IBu
         }
 
         // Successful hit
-        var damage = STR - target.END;
+        var damage = Dice.Roll("1d6") + STR;
         if (damage > 0)
         {
-            if (Parent.CurrentMap!.PlayerFOV.CurrentFOV.Contains(Parent.Position))
-            {
-                var prefixWord = GeneratePrefixWord();
-                Engine.GameScreen?.MessageLog.AddMessage(
-                    new ColoredString($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.",
-                        atkTextColor));
-            }
-
-            target.HP -= damage;
+            var prefixWord = GeneratePrefixWord();
+            Engine.GameScreen?.MessageLog.AddMessage(
+                new ColoredString($"{prefixWord} {Parent!.Name} deals {damage} damage to {target.Parent!.Name}.",
+                    atkTextColor));
 
             target.LastHit = Parent;
+
+            target.HP -= damage;
             if (target.LastHit != Engine.Player) return;
 
             // Make AimlessAI angry
@@ -200,11 +194,9 @@ internal class CombatantComponent : RogueLikeComponentBase<RogueLikeEntity>, IBu
         }
         else
         {
-            if (Parent.CurrentMap!.PlayerFOV.CurrentFOV.Contains(Parent.Position))
-            {
-                Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"{attackDesc} but does no damage.",
-                    atkTextColor));
-            }
+            Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"{attackDesc} but does no damage.",
+                atkTextColor));
+
 
             target.LastHit = Parent;
             if (target.LastHit != Engine.Player) return;

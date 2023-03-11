@@ -38,14 +38,14 @@ internal class StatusPanel : ControlsConsole
 
         STRStat = new Label("STR 00")
         {
-            Position = (1, 2)
+            Position = (1, 1)
         };
         Engine.Player.AllComponents.GetFirst<CombatantComponent>().STRChanged += OnPlayerStatsChanged;
         Controls.Add(STRStat);
 
         DEXStat = new Label("DEX 10")
         {
-            Position = (8, 2)
+            Position = (1, 2)
         };
         Engine.Player.AllComponents.GetFirst<CombatantComponent>().DEXChanged += OnPlayerStatsChanged;
         Controls.Add(DEXStat);
@@ -60,7 +60,7 @@ internal class StatusPanel : ControlsConsole
 
         GoldAmount = new Label("$:0   ")
         {
-            Position = (8, 3)
+            Position = (8, 2)
         };
         Engine.Player.AllComponents.GetFirst<InventoryComponent>().GoldChanged += OnPlayerGoldChanged;
         Controls.Add(GoldAmount);

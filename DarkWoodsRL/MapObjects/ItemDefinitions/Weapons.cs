@@ -16,18 +16,55 @@ internal static class Weapons
             Name = "Papier-Machete"
         };
         e.AllComponents.Add(new WeaponComponent(2, 2));
-        e.AllComponents.Add(new DetailsComponent("Weapon", new[] {""}));
+        e.AllComponents.Add(new DetailsComponent("Machete", new[] {""}));
         return e;
     }
-
-    public static RogueLikeEntity LeatherArmor()
+    
+    public static RogueLikeEntity WoodenStick()
     {
-        var e = new RogueLikeEntity(Color.SaddleBrown, Color.Black, ']', layer: (int) GameMap.Layer.Items)
+        var e = new RogueLikeEntity(Color.SaddleBrown, Color.Black, '/', layer: (int) GameMap.Layer.Items)
         {
-            Name = "LeatherArmor"
+            Name = "Wooden Stick"
         };
-        e.AllComponents.Add(new ArmorComponent(10));
-        e.AllComponents.Add(new DetailsComponent("Armor", new[] {"Comfy boi."}));
+        e.AllComponents.Add(new WeaponComponent(1, 3));
+        e.AllComponents.Add(new DetailsComponent("Chain", new[]
+        {
+            "Ol' reliable."
+        }));
+        return e;
+    }
+    
+    // Mythic Weapon
+    public static RogueLikeEntity BugleberrysDarkstaff()
+    {
+        var e = new RogueLikeEntity(Color.Crimson, Color.Black, '/', layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Bugleberry's Darkstaff"
+        };
+        e.AllComponents.Add(new WeaponComponent(10, 10));
+        e.AllComponents.Add(new DetailsComponent("Mythic Staff", new[]
+        {
+            "B. F. Bugleberry imbued this",
+            "staff with power of the Dark",
+            "Arcanas. Use it wisely."
+        }));
+        return e;
+    }
+    
+    public static RogueLikeEntity FleetwoodChain()
+    {
+        var e = new RogueLikeEntity(Color.Silver, Color.Black, '/', layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Fleetwood Chain"
+        };
+        e.AllComponents.Add(new WeaponComponent(3, 2));
+        e.AllComponents.Add(new DetailsComponent("Chain", new[]
+        {
+            "This chain has not yet been",
+            "broken, and if you don't ",
+            "love that now you'll never",
+            "love it again."
+        }));
         return e;
     }
 }

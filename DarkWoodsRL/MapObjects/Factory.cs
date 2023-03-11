@@ -51,7 +51,7 @@ public static class Factory
         // Create entity with appropriate attributes
         var player = new RogueLikeEntity(Color.Yellow, Color.Black, 1, false, layer: (int) GameMap.Layer.Monsters)
         {
-            Name = "Player"
+            Name = "Hero"
         };
 
         // Add component for controlling player movement via keyboard.
@@ -77,7 +77,7 @@ public static class Factory
         player.AllComponents.Add(new PlayerFOVController {FOVRadius = 6});
 
         // Player combatant
-        player.AllComponents.Add(new CombatantComponent(10, 2, 5, 5));
+        player.AllComponents.Add(new CombatantComponent(20, 2, 5, 1));
 
         // Player inventory
         player.AllComponents.Add(new InventoryComponent(26));

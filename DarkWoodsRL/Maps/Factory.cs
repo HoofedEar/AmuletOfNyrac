@@ -1,4 +1,5 @@
-﻿using DarkWoodsRL.MapObjects;
+﻿using System;
+using DarkWoodsRL.MapObjects;
 using DarkWoodsRL.MapObjects.ItemDefinitions;
 using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
@@ -21,7 +22,7 @@ namespace DarkWoodsRL.Maps;
 internal static class Factory
 {
     private const int MaxMonstersPerRoom = 2;
-    private const int MaxPotionsPerRoom = 4;
+    private const int MaxItemsPerRoom = 4;
 
     public static int CurrentDungeonDepth = 1;
 
@@ -53,17 +54,40 @@ internal static class Factory
         UpdateTerrain(map);
 
         // Spawn enemies/items/etc
-        SpawnMonsters(map, rooms, playerSpawn);
-        SpawnPotions(map, rooms, playerSpawn);
+        SpawnItems(map, rooms, playerSpawn);
         SpawnStairs(map, rooms, playerSpawn);
 
-        // Handle spawning different enemies based on the floor
-        // switch (CurrentDungeonLevel)
-        // {
-        //     
-        // }
+        switch (CurrentDungeonDepth)
+        {
+            case <= 4:
+                SpawnStandardMonsters(map, rooms, playerSpawn);
+                break;
+        }
+
 
         return (map, playerSpawn);
+    }
+
+    private static void SpawnStandardMonsters(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
+    {
+        foreach (var room in rooms.Items)
+        {
+            var enemies =
+                GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + (int) Math.Ceiling(CurrentDungeonDepth / 3.0));
+            for (var i = 0; i < enemies; i++)
+            {
+                var isTough = GlobalRandom.DefaultRNG.PercentageCheck(70f);
+                var enemy = isTough ? MapObjects.Enemies.Aimless.Bumbler() : MapObjects.Enemies.Aimless.Rat();
+
+                var isLegendary = GlobalRandom.DefaultRNG.PercentageCheck(5f);
+                if (isLegendary)
+                    enemy = MapObjects.Enemies.Aimless.GaintRat();
+
+                enemy.Position =
+                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                map.AddEntity(enemy);
+            }
+        }
     }
 
     private static Point GetPlayerSpawn(ItemList<Rectangle> rooms)
@@ -72,34 +96,98 @@ internal static class Factory
         return rooms.Items[0].Center;
     }
 
-    private static void SpawnMonsters(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
-    {
-        // Generate between zero and the max monsters per room.  Each monster has an 80% chance of being an orc (weaker)
-        // and a 20% chance of being a troll (stronger).
-        foreach (var room in rooms.Items)
-        {
-            int enemies = GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + 1);
-            for (int i = 0; i < enemies; i++)
-            {
-                var isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
-
-                var enemy = isOrc ? MapObjects.Enemies.Aggressive.Orc() : MapObjects.Enemies.Aggressive.Troll();
-                enemy.Position =
-                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                map.AddEntity(enemy);
-            }
-        }
-    }
-
-    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
+    private static void SpawnItems(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
     {
         // Generate between zero and the max potions per room.
         foreach (var room in rooms.Items)
         {
-            var potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
-            for (var i = 0; i < potions; i++)
+            var items = GlobalRandom.DefaultRNG.NextInt(0, MaxItemsPerRoom + 1);
+            for (var i = 0; i < items; i++)
             {
-                var type = GlobalRandom.DefaultRNG.NextInt(0, 6);
+                var mythic = GlobalRandom.DefaultRNG.PercentageCheck(2f);
+                if (mythic)
+                {
+                    var mythicType = GlobalRandom.DefaultRNG.NextInt(0, 4);
+                    switch (mythicType)
+                    {
+                        case 0:
+                        {
+                            var e = Weapons.BugleberrysDarkstaff();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                        case 1:
+                        {
+                            var e = Armor.RuneBodyplate();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                        case 2:
+                        {
+                            var e = Other.MrGreenzWallet();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                        case 3:
+                        {
+                            var e = Other.CanOfBluePaint();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                    }
+                    continue;
+                }
+
+                var uncommon = GlobalRandom.DefaultRNG.PercentageCheck(10f);
+                if (uncommon)
+                {
+                    var uncommonType = GlobalRandom.DefaultRNG.NextInt(0, 3);
+                    switch (uncommonType)
+                    {
+                        case 0:
+                        {
+                            var e = Other.ScrollOfEnchantArmor();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                        case 1:
+                        {
+                            var e = Other.ScrollOfEnchantWeapon();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                        case 2:
+                        {
+                            var e = Other.BalloonDog();
+                            e.Position =
+                                GlobalRandom.DefaultRNG.RandomPosition(room,
+                                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                            map.AddEntity(e);
+                            break;
+                        }
+                    }
+                    continue;
+                }
+
+                var type = GlobalRandom.DefaultRNG.NextInt(0, 10);
                 switch (type)
                 {
                     case 0:
@@ -122,7 +210,7 @@ internal static class Factory
                     }
                     case 2:
                     {
-                        var e = Weapons.PaperMachete();
+                        var e = Weapons.WoodenStick();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -140,7 +228,7 @@ internal static class Factory
                     }
                     case 4:
                     {
-                        var e = Other.ScrollOfEnchantWeapon();
+                        var e = Weapons.PaperMachete();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -149,7 +237,43 @@ internal static class Factory
                     }
                     case 5:
                     {
-                        var e = Other.BalloonDog();
+                        var e = Weapons.FleetwoodChain();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
+                        break;
+                    }
+                    case 6:
+                    {
+                        var e = Armor.TyeDyeShirt();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
+                        break;
+                    }
+                    case 7:
+                    {
+                        var e = Armor.PunkRockJacket();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
+                        break;
+                    }
+                    case 8:
+                    {
+                        var e = Armor.SplinterArmor();
+                        e.Position =
+                            GlobalRandom.DefaultRNG.RandomPosition(room,
+                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                        map.AddEntity(e);
+                        break;
+                    }
+                    case 9:
+                    {
+                        var e = Other.HealingPotion();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -169,11 +293,20 @@ internal static class Factory
             if (room != last) continue;
             var pos =
                 GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-            var floorTerrain = map.GetTerrainAt<Terrain>(pos);
-            if (floorTerrain == null) continue;
-            floorTerrain.Appearance.Glyph = 240;
-            floorTerrain.Appearance.Foreground = Color.Cyan;
-            floorTerrain.TrueAppearance.CopyAppearanceFrom(floorTerrain.Appearance);
+            if (CurrentDungeonDepth < 19)
+            {
+                var floorTerrain = map.GetTerrainAt<Terrain>(pos);
+                if (floorTerrain == null) continue;
+                floorTerrain.Appearance.Glyph = 240;
+                floorTerrain.Appearance.Foreground = Color.Cyan;
+                floorTerrain.TrueAppearance.CopyAppearanceFrom(floorTerrain.Appearance);
+            }
+            else
+            {
+                var e = Other.AmuletOfNyrac();
+                e.Position = pos;
+                map.AddEntity(e);
+            }
         }
     }
 

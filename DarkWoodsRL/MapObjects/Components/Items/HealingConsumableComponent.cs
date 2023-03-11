@@ -11,11 +11,12 @@ namespace DarkWoodsRL.MapObjects.Components.Items;
 internal class HealingConsumableComponent : RogueLikeComponentBase<RogueLikeEntity>, IConsumable
 {
     public int Amount { get; }
-
-    public HealingConsumableComponent(int amount)
+    public string Action { get; }
+    public HealingConsumableComponent(int amount, string action = "eat")
         : base(false, false, false, false)
     {
         Amount = amount;
+        Action = action;
     }
 
     public bool Consume(RogueLikeEntity consumer)
@@ -28,7 +29,7 @@ internal class HealingConsumableComponent : RogueLikeComponentBase<RogueLikeEnti
         {
             if (isPlayer)
                 Engine.GameScreen?.MessageLog.AddMessage(new(
-                    $"You eat the {Parent!.Name}, and recover {amountRecovered} HP!",
+                    $"You {Action} the {Parent!.Name}, and recover {amountRecovered} HP!",
                     MessageColors.HealthRecoveredAppearance));
             return true;
         }

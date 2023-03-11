@@ -1,5 +1,6 @@
 ﻿using DarkWoodsRL.Screens;
 using SadConsole;
+using SadConsole.SplashScreens;
 using SadRogue.Integration;
 
 namespace DarkWoodsRL;
@@ -17,7 +18,7 @@ internal static class Engine
 
     private static void Main()
     {
-        Settings.WindowTitle = "Game!";
+        Settings.WindowTitle = "Amulet of Nyrac";
 
         Game.Create(ScreenWidth, ScreenHeight, "Fonts/Andux2x.font");
         Game.Instance.OnStart = Init;

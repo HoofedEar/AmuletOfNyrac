@@ -10,10 +10,6 @@ namespace DarkWoodsRL.MapObjects.ItemDefinitions;
 /// </summary>
 internal static class Other
 {
-    /// <summary>
-    /// Gold, used for scoring purposes
-    /// </summary>
-    /// <returns></returns>
     public static RogueLikeEntity Gold()
     {
         var e = new RogueLikeEntity(Color.Gold, Color.Black, '*', layer: (int) GameMap.Layer.Items)
@@ -35,6 +31,21 @@ internal static class Other
         {
             "Super yummy, but super",
             "sticky. Heals you a lil."
+        }));
+        return e;
+    }
+
+    public static RogueLikeEntity HealingPotion()
+    {
+        var e = new RogueLikeEntity(Color.Red, Color.Black, '!', layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Healing Potion"
+        };
+        e.AllComponents.Add(new HealingConsumableComponent(15, "drink"));
+        e.AllComponents.Add(new DetailsComponent("Potion", new[]
+        {
+            "Does what it says on",
+            "the tin. Bottoms up!"
         }));
         return e;
     }
@@ -84,7 +95,7 @@ internal static class Other
         }));
         return e;
     }
-    
+
     /// <summary>
     /// Functionally a Scroll of Alert Monsters
     /// </summary>
@@ -104,7 +115,7 @@ internal static class Other
         }));
         return e;
     }
-    
+
     public static RogueLikeEntity AmuletOfNyrac()
     {
         var e = new RogueLikeEntity(Color.Turquoise, Color.Black, 12, layer: (int) GameMap.Layer.Items)
@@ -117,6 +128,21 @@ internal static class Other
             "The reason for your quest.",
             "Don this amulet to instantly",
             "escape the dungeon alive."
+        }));
+        return e;
+    }
+
+    public static RogueLikeEntity CanOfBluePaint()
+    {
+        var e = new RogueLikeEntity(Color.Blue, Color.Black, 229, layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Can of Blue Paint"
+        };
+        e.AllComponents.Add(new PaintComponent(Color.Blue));
+        e.AllComponents.Add(new DetailsComponent("Paint Can", new[]
+        {
+            "Wonder if it tastes like",
+            "red paint."
         }));
         return e;
     }

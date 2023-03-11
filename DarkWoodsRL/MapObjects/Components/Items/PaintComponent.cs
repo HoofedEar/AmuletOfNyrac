@@ -1,4 +1,6 @@
 using DarkWoodsRL.MapObjects.Components.Items.Interfaces;
+using DarkWoodsRL.Themes;
+using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogue.Primitives;
@@ -9,7 +11,7 @@ public class PaintComponent : RogueLikeComponentBase<RogueLikeEntity>, IConsumab
 {
     private readonly Color _color;
 
-    protected PaintComponent(Color color) : base(false, false, false, false)
+    public PaintComponent(Color color) : base(false, false, false, false)
     {
         _color = color;
     }
@@ -17,6 +19,9 @@ public class PaintComponent : RogueLikeComponentBase<RogueLikeEntity>, IConsumab
     public bool Consume(RogueLikeEntity consumer)
     {
         consumer.Appearance.Foreground = _color;
+        Engine.GameScreen?.MessageLog.AddMessage(
+            new ColoredString($"ACK! Yup, tastes like red paint.",
+                MessageColors.EnemyAtkAtkAppearance));
         return true;
     }
 }

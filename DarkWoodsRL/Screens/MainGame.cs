@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Combatant;
 using DarkWoodsRL.Maps;
@@ -95,6 +96,9 @@ internal class MainGame : ScreenObject
     /// </summary>
     private static void PlayerDeath(object? s, EventArgs e)
     {
+        Engine.GameScreen?.MessageLog.AddMessage(new(
+            "You perish...",
+            MessageColors.EnemyAtkAtkAppearance));
         Engine.Player.AllComponents.GetFirst<CombatantComponent>().Died -= PlayerDeath;
         // Go back to main menu for now
         Game.Instance.Screen = new GameOver("    YOU DIED", Color.DarkRed,
