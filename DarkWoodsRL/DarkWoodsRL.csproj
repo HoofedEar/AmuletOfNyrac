@@ -25,12 +25,12 @@
       <Content Include="Fonts\Andux2x.font">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-	  <EmbeddedResource Include="Resources\logo.ans" />
-	</ItemGroup>
+      <EmbeddedResource Include="Resources\logo.ans" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Remove="Resources\Audio\impact_a.wav" />
-		<None Remove="Resources\Audio\impact_b.wav" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources\Audio\impact_a.wav" />
+        <None Remove="Resources\Audio\impact_b.wav" />
+    </ItemGroup>
 
 </Project>
