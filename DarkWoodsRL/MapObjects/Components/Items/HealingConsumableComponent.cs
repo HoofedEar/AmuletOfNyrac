@@ -29,7 +29,7 @@ internal class HealingConsumableComponent : RogueLikeComponentBase<RogueLikeEnti
         {
             if (isPlayer)
                 Engine.GameScreen?.MessageLog.AddMessage(new(
-                    $"You {Action} the {Parent!.Name}, and recover {amountRecovered} HP!",
+                    $"You {Action} the {Parent!.Name}, and heal {amountRecovered} HP!",
                     MessageColors.HealthRecoveredAppearance));
             return true;
         }

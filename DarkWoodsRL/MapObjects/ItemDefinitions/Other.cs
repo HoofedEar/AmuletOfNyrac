@@ -29,8 +29,8 @@ internal static class Other
         e.AllComponents.Add(new HealingConsumableComponent(4));
         e.AllComponents.Add(new DetailsComponent("Food", new[]
         {
-            "Super yummy, but super",
-            "sticky. Heals you a lil."
+            "Super yummy, but super sticky.",
+            "Heals you a lil."
         }));
         return e;
     }
@@ -44,8 +44,8 @@ internal static class Other
         e.AllComponents.Add(new HealingConsumableComponent(15, "drink"));
         e.AllComponents.Add(new DetailsComponent("Potion", new[]
         {
-            "Does what it says on",
-            "the tin. Bottoms up!"
+            "Does what it says on the tin.",
+            "Bottoms up, bucko!"
         }));
         return e;
     }
@@ -66,7 +66,7 @@ internal static class Other
 
     public static RogueLikeEntity ScrollOfEnchantArmor()
     {
-        var e = new RogueLikeEntity(Color.AnsiGreenBright, Color.Black, '?', layer: (int) GameMap.Layer.Items)
+        var e = new RogueLikeEntity(Color.OrangeRed, Color.Black, '?', layer: (int) GameMap.Layer.Items)
         {
             Name = "Scroll of Enchant Armor"
         };
@@ -101,7 +101,7 @@ internal static class Other
     /// </summary>
     public static RogueLikeEntity BalloonDog()
     {
-        var e = new RogueLikeEntity(Color.Cyan, Color.Black, 227, layer: (int) GameMap.Layer.Items)
+        var e = new RogueLikeEntity(Color.HotPink, Color.Black, 227, layer: (int) GameMap.Layer.Items)
         {
             Name = "Balloon Dog"
         };
@@ -112,22 +112,6 @@ internal static class Other
             "A faithful companion on your",
             "long and arduous quest. Keep",
             "him close."
-        }));
-        return e;
-    }
-
-    public static RogueLikeEntity AmuletOfNyrac()
-    {
-        var e = new RogueLikeEntity(Color.Turquoise, Color.Black, 12, layer: (int) GameMap.Layer.Items)
-        {
-            Name = "Amulet of Nyrac"
-        };
-        e.AllComponents.Add(new WinningComponent());
-        e.AllComponents.Add(new DetailsComponent("Amulet", new[]
-        {
-            "The reason for your quest.",
-            "Don this amulet to instantly",
-            "escape the dungeon alive."
         }));
         return e;
     }

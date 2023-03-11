@@ -23,7 +23,7 @@ public class MainMenu : ControlsConsole
         var title = new Label("Amulet of Nyrac")
         {
             Name = "GameTitle",
-            TextColor = Color.DarkGreen,
+            TextColor = Color.DarkTurquoise,
             Position = (0, 0)
         };
         Controls.Add(title);

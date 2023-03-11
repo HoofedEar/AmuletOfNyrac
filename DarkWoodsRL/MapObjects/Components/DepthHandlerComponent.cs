@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using DarkWoodsRL.Screens;
 using DarkWoodsRL.Themes;
 using SadConsole;
 using SadRogue.Integration;
@@ -52,6 +53,13 @@ public class DepthHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
             // Calculate initial FOV for player on this new map
             Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
 
+            return true;
+        }
+        
+        if (getTerrain is {Appearance.Glyph: 12})
+        {
+            Game.Instance.Screen = new GameOver("    YOU WIN ", Color.AnsiGreenBright,
+                Engine.Player.AllComponents.GetFirst<InventoryComponent>().Gold);
             return true;
         }
 

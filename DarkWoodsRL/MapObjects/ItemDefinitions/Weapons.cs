@@ -15,8 +15,14 @@ internal static class Weapons
         {
             Name = "Papier-Machete"
         };
-        e.AllComponents.Add(new WeaponComponent(2, 2));
-        e.AllComponents.Add(new DetailsComponent("Machete", new[] {""}));
+        e.AllComponents.Add(new WeaponComponent(4, 3));
+        e.AllComponents.Add(new DetailsComponent("Machete", new[]
+        {
+            "Just because this is made",
+            "of paper with random words",
+            "on it doesn't make it any",
+            "less badass."
+        }));
         return e;
     }
     
@@ -26,8 +32,8 @@ internal static class Weapons
         {
             Name = "Wooden Stick"
         };
-        e.AllComponents.Add(new WeaponComponent(1, 3));
-        e.AllComponents.Add(new DetailsComponent("Chain", new[]
+        e.AllComponents.Add(new WeaponComponent(2, 3));
+        e.AllComponents.Add(new DetailsComponent("Stick", new[]
         {
             "Ol' reliable."
         }));
@@ -53,7 +59,7 @@ internal static class Weapons
     
     public static RogueLikeEntity FleetwoodChain()
     {
-        var e = new RogueLikeEntity(Color.Silver, Color.Black, '/', layer: (int) GameMap.Layer.Items)
+        var e = new RogueLikeEntity(Color.LightSteelBlue, Color.Black, '/', layer: (int) GameMap.Layer.Items)
         {
             Name = "Fleetwood Chain"
         };

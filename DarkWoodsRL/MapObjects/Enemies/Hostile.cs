@@ -11,7 +11,7 @@ public static class Hostile
 {
     public static RogueLikeEntity Wuff()
     {
-        var enemy = new RogueLikeEntity(MainPalette.Slate, Color.Black, 'W', false, layer: (int) GameMap.Layer.Monsters)
+        var enemy = new RogueLikeEntity(Color.Plum, Color.Black, 'W', false, layer: (int) GameMap.Layer.Monsters)
         {
             Name = "Wuff"
         }; 
@@ -39,14 +39,28 @@ public static class Hostile
     
     public static RogueLikeEntity Owlbear()
     {
-        var enemy = new RogueLikeEntity(Color.PaleVioletRed, Color.Black, 'O', false, layer: (int) GameMap.Layer.Monsters)
+        var enemy = new RogueLikeEntity(Color.BlueViolet, Color.Black, 'O', false, layer: (int) GameMap.Layer.Monsters)
         {
             Name = "Owlbear"
         }; 
 
         // Add AI component to bump action toward the player if the player is in view
         enemy.AllComponents.Add(new HostileAI());
-        enemy.AllComponents.Add(new CombatantComponent(15, 2, 7, combatVerb: "slashes at", xp: 25));
+        enemy.AllComponents.Add(new CombatantComponent(15, 2, 6, combatVerb: "slashes at", xp: 25));
+
+        return enemy;
+    }
+    
+    public static RogueLikeEntity Dragoon()
+    {
+        var enemy = new RogueLikeEntity(Color.Red, Color.Black, 'D', false, layer: (int) GameMap.Layer.Monsters)
+        {
+            Name = "Dragoon"
+        }; 
+
+        // Add AI component to bump action toward the player if the player is in view
+        enemy.AllComponents.Add(new HostileAI());
+        enemy.AllComponents.Add(new CombatantComponent(15, 2, 7, 8, combatVerb: "slashes at", xp: 25));
 
         return enemy;
     }

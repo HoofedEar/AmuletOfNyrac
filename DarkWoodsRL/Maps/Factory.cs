@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DarkWoodsRL.MapObjects;
 using DarkWoodsRL.MapObjects.ItemDefinitions;
 using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
+using SadRogue.Integration;
 using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;
 using ShaiRandom.Generators;
@@ -59,6 +62,15 @@ internal static class Factory
 
         switch (CurrentDungeonDepth)
         {
+            case >= 15:
+                SpawnToughestMonsters(map, rooms, playerSpawn);
+                break;
+            case >= 10:
+                SpawnTougherMonsters(map, rooms, playerSpawn);
+                break;
+            case >= 5:
+                SpawnTougherMonsters(map, rooms, playerSpawn);
+                break;
             case <= 4:
                 SpawnStandardMonsters(map, rooms, playerSpawn);
                 break;
@@ -82,6 +94,50 @@ internal static class Factory
                 var isLegendary = GlobalRandom.DefaultRNG.PercentageCheck(5f);
                 if (isLegendary)
                     enemy = MapObjects.Enemies.Aimless.GaintRat();
+
+                enemy.Position =
+                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                map.AddEntity(enemy);
+            }
+        }
+    }
+
+    private static void SpawnTougherMonsters(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
+    {
+        foreach (var room in rooms.Items)
+        {
+            var enemies =
+                GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + (int) Math.Ceiling(CurrentDungeonDepth / 3.0));
+            for (var i = 0; i < enemies; i++)
+            {
+                var isTough = GlobalRandom.DefaultRNG.PercentageCheck(70f);
+                var enemy = isTough ? MapObjects.Enemies.Aimless.Rat() : MapObjects.Enemies.Hostile.Wuff();
+
+                var isLegendary = GlobalRandom.DefaultRNG.PercentageCheck(5f);
+                if (isLegendary)
+                    enemy = MapObjects.Enemies.Hostile.Glomper();
+
+                enemy.Position =
+                    GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                map.AddEntity(enemy);
+            }
+        }
+    }
+
+    private static void SpawnToughestMonsters(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
+    {
+        foreach (var room in rooms.Items)
+        {
+            var enemies =
+                GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + (int) Math.Ceiling(CurrentDungeonDepth / 3.0));
+            for (var i = 0; i < enemies; i++)
+            {
+                var isTough = GlobalRandom.DefaultRNG.PercentageCheck(70f);
+                var enemy = isTough ? MapObjects.Enemies.Hostile.Wuff() : MapObjects.Enemies.Hostile.Owlbear();
+
+                var isLegendary = GlobalRandom.DefaultRNG.PercentageCheck(5f);
+                if (isLegendary)
+                    enemy = MapObjects.Enemies.Hostile.Dragoon();
 
                 enemy.Position =
                     GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -147,6 +203,7 @@ internal static class Factory
                             break;
                         }
                     }
+
                     continue;
                 }
 
@@ -184,103 +241,20 @@ internal static class Factory
                             break;
                         }
                     }
+
                     continue;
                 }
 
-                var type = GlobalRandom.DefaultRNG.NextInt(0, 10);
-                switch (type)
+                var item = GlobalRandom.DefaultRNG.RandomElement(new List<Func<RogueLikeEntity>>()
                 {
-                    case 0:
-                    {
-                        var e = Other.Honeycomb();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 1:
-                    {
-                        var e = Armor.ChestBarrel();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 2:
-                    {
-                        var e = Weapons.WoodenStick();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 3:
-                    {
-                        var e = Other.Gold();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 4:
-                    {
-                        var e = Weapons.PaperMachete();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 5:
-                    {
-                        var e = Weapons.FleetwoodChain();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 6:
-                    {
-                        var e = Armor.TyeDyeShirt();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 7:
-                    {
-                        var e = Armor.PunkRockJacket();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 8:
-                    {
-                        var e = Armor.SplinterArmor();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                    case 9:
-                    {
-                        var e = Other.HealingPotion();
-                        e.Position =
-                            GlobalRandom.DefaultRNG.RandomPosition(room,
-                                pos => map.WalkabilityView[pos] && pos != playerSpawn);
-                        map.AddEntity(e);
-                        break;
-                    }
-                }
+                    Other.Honeycomb, Other.Gold, Other.Gold, Other.Honeycomb, Other.HealingPotion,
+                    Weapons.FleetwoodChain, Weapons.PaperMachete, Weapons.WoodenStick,
+                    Armor.ChestBarrel, Armor.PunkRockJacket, Armor.TortoiseShell
+                });
+                var o = item.Invoke();
+                o.Position = GlobalRandom.DefaultRNG.RandomPosition(room,
+                    pos => map.WalkabilityView[pos] && pos != playerSpawn);
+                map.AddEntity(o);
             }
         }
     }
@@ -292,8 +266,14 @@ internal static class Factory
         {
             if (room != last) continue;
             var pos =
-                GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
-            if (CurrentDungeonDepth < 19)
+                GlobalRandom.DefaultRNG.RandomPosition(room, p => map.WalkabilityView[p] && p != playerSpawn);
+            while (map.GetEntitiesAt<RogueLikeEntity>(pos).Any())
+            {
+                pos =
+                    GlobalRandom.DefaultRNG.RandomPosition(room, p => map.WalkabilityView[p] && p != playerSpawn);
+            }
+
+            if (CurrentDungeonDepth < 20)
             {
                 var floorTerrain = map.GetTerrainAt<Terrain>(pos);
                 if (floorTerrain == null) continue;
@@ -303,9 +283,11 @@ internal static class Factory
             }
             else
             {
-                var e = Other.AmuletOfNyrac();
-                e.Position = pos;
-                map.AddEntity(e);
+                var floorTerrain = map.GetTerrainAt<Terrain>(pos);
+                if (floorTerrain == null) continue;
+                floorTerrain.Appearance.Glyph = 12;
+                floorTerrain.Appearance.Foreground = Color.DarkTurquoise;
+                floorTerrain.TrueAppearance.CopyAppearanceFrom(floorTerrain.Appearance);
             }
         }
     }

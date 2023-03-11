@@ -14,9 +14,9 @@ namespace DarkWoodsRL.Screens.MainGameMenus;
 public class DetailScreen : MainGameMenu
 {
     public Label ItemType;
-    public List<Label> Details = new() {new Label(28), new Label(28), new Label(28), new Label(28), new Label(28)};
+    public List<Label> Details = new() {new Label(30), new Label(30), new Label(30), new Label(30), new Label(30)};
 
-    public DetailScreen(RogueLikeEntity item, int type) : base(30, 11)
+    public DetailScreen(RogueLikeEntity item, int type) : base(32, 11)
     {
         Title = item.Name.Replace(" (e)", "");
         var playerInventory = Engine.Player.AllComponents.GetFirst<InventoryComponent>();

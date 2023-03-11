@@ -14,7 +14,7 @@ public static class Armor
         {
             Name = "Chest Barrel"
         };
-        e.AllComponents.Add(new ArmorComponent(4));
+        e.AllComponents.Add(new ArmorComponent(6));
         e.AllComponents.Add(new DetailsComponent("Barrel", new[]
         {
             "It has two arm holes in",
@@ -29,12 +29,12 @@ public static class Armor
         {
             Name = "Punk Rock Jacket"
         };
-        e.AllComponents.Add(new ArmorComponent(3));
+        e.AllComponents.Add(new ArmorComponent(5));
         e.AllComponents.Add(new DetailsComponent("Jacket", new[]
         {
-            "An assortment of sewn",
-            "-together strips of ripped-up",
-            "T-shirts and random military patches."
+            "An assortment of sewn together",
+            "strips of ripped-up T-shirts",
+            "and random military patches."
         }));
         return e;
     }
@@ -45,7 +45,7 @@ public static class Armor
         {
             Name = "Splinter Armor"
         };
-        e.AllComponents.Add(new ArmorComponent(1));
+        e.AllComponents.Add(new ArmorComponent(3));
         e.AllComponents.Add(new DetailsComponent("Armor", new[]
         {
             "Really crappy armor made",
@@ -74,7 +74,7 @@ public static class Armor
         {
             Name = "Tortoise Shell"
         };
-        e.AllComponents.Add(new ArmorComponent(4));
+        e.AllComponents.Add(new ArmorComponent(7));
         e.AllComponents.Add(new DetailsComponent("Shell", new[]
         {
             "It shows no sign of a previous",
@@ -90,7 +90,7 @@ public static class Armor
         {
             Name = "Rune Bodyplate"
         };
-        e.AllComponents.Add(new ArmorComponent(10));
+        e.AllComponents.Add(new ArmorComponent(15));
         e.AllComponents.Add(new DetailsComponent("Mythic Armor", new[]
         {
             "Provides excellent protection.",

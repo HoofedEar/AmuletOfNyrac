@@ -56,7 +56,7 @@ internal class MainGame : ScreenObject
         Engine.Player.AllComponents.GetFirst<CombatantComponent>().Died += PlayerDeath;
 
         // Write welcome message
-        MessageLog.AddMessage(new("Beware! This castle ruin is filled with dark creatures that seek your blood.",
+        MessageLog.AddMessage(new("Hero, you must hurry and find the Amulet of Nyrac! Be careful!",
             MessageColors.WelcomeTextAppearance));
     }
 

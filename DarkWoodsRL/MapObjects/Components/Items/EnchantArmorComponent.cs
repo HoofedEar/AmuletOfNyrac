@@ -25,10 +25,10 @@ public class EnchantArmorComponent : RogueLikeComponentBase<RogueLikeEntity>, IC
             // Check that it is a weapon
             if (armor == null || used || maxEnch) continue;
             
-            // Then check that it is equipped, and not already enchant lvl 2
+            // Then check that it is equipped, and not already enchant lvl 6
             if (armor is not {IsEquipped: true}) continue;
             
-            if (armor is not {EnchantLvl: < 2})
+            if (armor is not {EnchantLvl: < 5})
             {
                 maxEnch = true;
                 continue;

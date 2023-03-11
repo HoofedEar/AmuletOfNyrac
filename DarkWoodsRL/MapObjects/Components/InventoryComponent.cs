@@ -39,6 +39,8 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
     {
         Capacity = capacity;
         Items = new List<RogueLikeEntity>(capacity);
+        Items.Add(ItemDefinitions.Other.HealingPotion());
+        Items.Add(ItemDefinitions.Other.HealingPotion());
     }
 
     /// <summary>
@@ -85,7 +87,7 @@ internal class InventoryComponent : RogueLikeComponentBase<RogueLikeEntity>
             if (!item.AllComponents.Contains<ICarryable>())
             {
                 var terrain = Parent.CurrentMap.GetTerrainAt<Terrain>(Parent.Position);
-                if (terrain is {Appearance.Glyph: 240})
+                if (terrain is {Appearance.Glyph: 240} or {Appearance.Glyph: 12})
                 {
                     Parent.AllComponents.GetFirst<DepthHandlerComponent>().Descend();
                     return false;
