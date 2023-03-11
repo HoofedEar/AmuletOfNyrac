@@ -5,18 +5,18 @@ using DarkWoodsRL.Maps;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 
-namespace DarkWoodsRL.MapObjects.Items;
+namespace DarkWoodsRL.MapObjects.ItemDefinitions;
 
 internal static class Weapons
 {
-    public static RogueLikeEntity Dagger()
+    public static RogueLikeEntity PaperMachete()
     {
         var e = new RogueLikeEntity(Color.Silver, Color.Black, '/', layer: (int) GameMap.Layer.Items)
         {
-            Name = "Bugleberry's Lament"
+            Name = "Papier-Machete"
         };
-        e.AllComponents.Add(new WeaponComponent(10, 2));
-        e.AllComponents.Add(new DetailsComponent("Weapon", new[] {"", "", "A smol guy."}));
+        e.AllComponents.Add(new WeaponComponent(2, 2));
+        e.AllComponents.Add(new DetailsComponent("Weapon", new[] {""}));
         return e;
     }
 
@@ -27,7 +27,7 @@ internal static class Weapons
             Name = "LeatherArmor"
         };
         e.AllComponents.Add(new ArmorComponent(10));
-        e.AllComponents.Add(new DetailsComponent("Armor", new[] {"+10 END", "", "Comfy boi."}));
+        e.AllComponents.Add(new DetailsComponent("Armor", new[] {"Comfy boi."}));
         return e;
     }
 }

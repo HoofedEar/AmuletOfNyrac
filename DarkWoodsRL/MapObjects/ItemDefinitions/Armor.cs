@@ -4,7 +4,7 @@ using DarkWoodsRL.Maps;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 
-namespace DarkWoodsRL.MapObjects.Items;
+namespace DarkWoodsRL.MapObjects.ItemDefinitions;
 
 public static class Armor
 {

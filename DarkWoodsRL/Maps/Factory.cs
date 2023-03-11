@@ -1,4 +1,5 @@
 ﻿using DarkWoodsRL.MapObjects;
+using DarkWoodsRL.MapObjects.ItemDefinitions;
 using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
@@ -103,7 +104,7 @@ internal static class Factory
                 {
                     case 0:
                     {
-                        var e = MapObjects.Items.Other.Honeycomb();
+                        var e = Other.Honeycomb();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -112,7 +113,7 @@ internal static class Factory
                     }
                     case 1:
                     {
-                        var e = MapObjects.Items.Armor.ChestBarrel();
+                        var e = Armor.ChestBarrel();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -121,7 +122,7 @@ internal static class Factory
                     }
                     case 2:
                     {
-                        var e = MapObjects.Items.Weapons.Dagger();
+                        var e = Weapons.PaperMachete();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -130,7 +131,7 @@ internal static class Factory
                     }
                     case 3:
                     {
-                        var e = MapObjects.Items.Other.Gold();
+                        var e = Other.Gold();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -139,7 +140,7 @@ internal static class Factory
                     }
                     case 4:
                     {
-                        var e = MapObjects.Items.Other.ScrollOfEnchantWeapon();
+                        var e = Other.ScrollOfEnchantWeapon();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);
@@ -148,7 +149,7 @@ internal static class Factory
                     }
                     case 5:
                     {
-                        var e = MapObjects.Items.Other.BalloonDog();
+                        var e = Other.BalloonDog();
                         e.Position =
                             GlobalRandom.DefaultRNG.RandomPosition(room,
                                 pos => map.WalkabilityView[pos] && pos != playerSpawn);

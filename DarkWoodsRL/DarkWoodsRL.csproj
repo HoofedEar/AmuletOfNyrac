@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="OpenTK.OpenAL" Version="4.7.7" />
-        <PackageReference Include="SadConsole.Host.MonoGame" Version="9.2.0" />
+        <PackageReference Include="SadConsole.Host.MonoGame" Version="9.2.2" />
         <PackageReference Include="TheSadRogue.Integration" Version="1.0.0-beta01" />
     </ItemGroup>
 

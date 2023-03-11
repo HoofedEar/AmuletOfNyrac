@@ -3,7 +3,7 @@ using DarkWoodsRL.Maps;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 
-namespace DarkWoodsRL.MapObjects.Items;
+namespace DarkWoodsRL.MapObjects.ItemDefinitions;
 
 /// <summary>
 /// Simple class with some static functions for creating items.
@@ -85,6 +85,9 @@ internal static class Other
         return e;
     }
     
+    /// <summary>
+    /// Functionally a Scroll of Alert Monsters
+    /// </summary>
     public static RogueLikeEntity BalloonDog()
     {
         var e = new RogueLikeEntity(Color.Cyan, Color.Black, 227, layer: (int) GameMap.Layer.Items)
@@ -98,6 +101,22 @@ internal static class Other
             "A faithful companion on your",
             "long and arduous quest. Keep",
             "him close."
+        }));
+        return e;
+    }
+    
+    public static RogueLikeEntity AmuletOfNyrac()
+    {
+        var e = new RogueLikeEntity(Color.Turquoise, Color.Black, 12, layer: (int) GameMap.Layer.Items)
+        {
+            Name = "Amulet of Nyrac"
+        };
+        e.AllComponents.Add(new WinningComponent());
+        e.AllComponents.Add(new DetailsComponent("Amulet", new[]
+        {
+            "The reason for your quest.",
+            "Don this amulet to instantly",
+            "escape the dungeon alive."
         }));
         return e;
     }
