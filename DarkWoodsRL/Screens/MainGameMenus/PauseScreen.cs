@@ -24,7 +24,7 @@ internal class PauseView : MainGameMenu
     {
         if ((string) e.Item == "Exit")
         {
-            // Game.Instance.MonoGameInstance.Exit();
+            Game.Instance.MonoGameInstance.Exit();
         }
         Hide();
     }
