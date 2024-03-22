@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
-using DarkWoodsRL.MapObjects.Components;
 using DarkWoodsRL.MapObjects.Components.Combatant;
 using DarkWoodsRL.MapObjects.Components.EnemyAI;
 using DarkWoodsRL.MapObjects.Components.Interfaces;
 using DarkWoodsRL.Themes;
 using GoRogue.GameFramework;
-using GoRogue.SpatialMaps;
 using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Integration.Maps;
 using SadRogue.Primitives;
+using SadRogue.Primitives.SpatialMaps;
 
 namespace DarkWoodsRL.Maps;
 

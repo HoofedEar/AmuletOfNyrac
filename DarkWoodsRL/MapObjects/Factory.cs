@@ -56,9 +56,9 @@ public static class Factory
 
         // Add component for controlling player movement via keyboard.
         var motionControl = new CustomPlayerKeybindingsComponent();
-        motionControl.SetMotions(PlayerKeybindingsComponent.ArrowMotions);
-        motionControl.SetMotions(PlayerKeybindingsComponent.NumPadAllMotions);
-        motionControl.SetMotions(PlayerKeybindingsComponent.WasdMotions);
+        motionControl.SetMotions(KeybindingsComponent.ArrowMotions);
+        motionControl.SetMotions(KeybindingsComponent.NumPadAllMotions);
+        motionControl.SetMotions(KeybindingsComponent.WasdMotions);
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
         motionControl.SetAction(new InputKey(Keys.OemPeriod, KeyModifiers.Shift),

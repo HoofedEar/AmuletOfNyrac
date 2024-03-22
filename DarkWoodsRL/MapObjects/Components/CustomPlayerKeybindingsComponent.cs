@@ -1,4 +1,5 @@
 ﻿using DarkWoodsRL.Maps;
+using SadRogue.Integration;
 using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 
@@ -7,7 +8,7 @@ namespace DarkWoodsRL.MapObjects.Components;
 /// <summary>
 /// Subclass of the integration library's keybindings component that ensures the player's movements count as the player's turn when successful.
 /// </summary>
-internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
+internal class CustomPlayerKeybindingsComponent : KeybindingsComponent<RogueLikeEntity>
 {
     protected override void MotionHandler(Direction direction)
     {

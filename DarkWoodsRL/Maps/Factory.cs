@@ -249,7 +249,7 @@ internal static class Factory
                 {
                     Other.Honeycomb, Other.Gold, Other.Gold, Other.Honeycomb, Other.HealingPotion,
                     Weapons.FleetwoodChain, Weapons.PaperMachete, Weapons.WoodenStick,
-                    Armor.ChestBarrel, Armor.PunkRockJacket, Armor.TortoiseShell
+                    Armor.ChestBarrel, Armor.PunkRockJacket, Armor.TortoiseShell, Weapons.FlameLiberator
                 });
                 var o = item.Invoke();
                 o.Position = GlobalRandom.DefaultRNG.RandomPosition(room,

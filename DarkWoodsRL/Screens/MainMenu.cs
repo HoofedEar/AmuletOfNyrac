@@ -66,6 +66,6 @@ public class MainMenu : ControlsConsole
 
     private void ExitOnClick(object? sender, EventArgs e)
     {
-        Game.Instance.MonoGameInstance.Exit();
+        // Game.Instance.MonoGameInstance.Exit();
     }
 }

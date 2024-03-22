@@ -1,5 +1,4 @@
 ﻿using SadConsole.UI;
-using SadConsole.UI.Themes;
 
 namespace DarkWoodsRL.Themes;
 
@@ -13,7 +12,7 @@ internal static class StatusPanel
 
     private static Colors GetHPBarColors()
     {
-        var colors = Library.Default.Colors.Clone();
+        var colors = new Colors();
         colors.Appearance_ControlNormal.Foreground = MainPalette.Sage;
         colors.Appearance_ControlNormal.Background = MainPalette.Magenta;
 

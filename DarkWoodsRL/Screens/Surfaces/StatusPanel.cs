@@ -4,7 +4,6 @@ using DarkWoodsRL.MapObjects.Components.Combatant;
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
-using SadConsole.UI.Themes;
 using SadRogue.Primitives;
 
 namespace DarkWoodsRL.Screens.Surfaces;
@@ -29,7 +28,7 @@ internal class StatusPanel : ControlsConsole
             DisplayTextColor = Color.White
         };
         HPBar.SetThemeColors(Themes.StatusPanel.HPBarColors);
-        ((ProgressBarTheme) HPBar.Theme).Background.SetGlyph(' ');
+        HPBar.BackgroundGlyph = ' ';
 
         // Add HP bar to controls, and ensure HP bar updates when the player's health changes
         Controls.Add(HPBar);

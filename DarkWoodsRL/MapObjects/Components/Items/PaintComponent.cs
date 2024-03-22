@@ -18,7 +18,8 @@ public class PaintComponent : RogueLikeComponentBase<RogueLikeEntity>, IConsumab
 
     public bool Consume(RogueLikeEntity consumer)
     {
-        consumer.Appearance.Foreground = _color;
+        consumer.AppearanceSingle.Appearance.Foreground = _color;
+        // consumer.Appearance.Foreground = _color;
         Engine.GameScreen?.MessageLog.AddMessage(
             new ColoredString($"ACK! Yup, tastes like red paint.",
                 MessageColors.EnemyAtkAtkAppearance));
