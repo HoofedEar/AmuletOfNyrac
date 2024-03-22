@@ -25,7 +25,6 @@
       <Content Include="Fonts\Andux2x.font">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <EmbeddedResource Include="Resources\logo.ans" />
     </ItemGroup>
 
     <ItemGroup>
