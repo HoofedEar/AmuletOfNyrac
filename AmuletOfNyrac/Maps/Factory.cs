@@ -71,7 +71,7 @@ internal static class Factory
             case >= 5:
                 SpawnTougherMonsters(map, rooms, playerSpawn);
                 break;
-            case <= 4:
+            default:
                 SpawnStandardMonsters(map, rooms, playerSpawn);
                 break;
         }

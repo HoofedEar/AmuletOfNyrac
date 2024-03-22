@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using AmuletOfNyrac.Screens;
 using AmuletOfNyrac.Themes;
@@ -9,12 +8,8 @@ using SadRogue.Primitives;
 
 namespace AmuletOfNyrac.MapObjects.Components;
 
-public class DepthHandlerComponent : RogueLikeComponentBase<RogueLikeEntity>
+public class DepthHandlerComponent() : RogueLikeComponentBase<RogueLikeEntity>(false, false, false, false)
 {
-    public DepthHandlerComponent() : base(false, false, false, false)
-    {
-    }
-
     public bool Descend()
     {
         var isPlayer = Parent == Engine.Player;

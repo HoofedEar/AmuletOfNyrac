@@ -1,7 +1,6 @@
 using AmuletOfNyrac.MapObjects.Components.Items.Armor;
 using AmuletOfNyrac.MapObjects.Components.Items.Interfaces;
 using AmuletOfNyrac.Themes;
-using AmuletOfNyrac.MapObjects.Components.Items.Weapon;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 

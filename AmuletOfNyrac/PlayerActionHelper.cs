@@ -1,9 +1,7 @@
 using System;
 using AmuletOfNyrac.MapObjects.Components.Combatant;
 using AmuletOfNyrac.Maps;
-using AmuletOfNyrac.MapObjects.Components;
 using SadRogue.Integration;
-using SadRogue.Primitives;
 
 namespace AmuletOfNyrac;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using AmuletOfNyrac.MapObjects.Components;
 using AmuletOfNyrac.MapObjects.Components.Combatant;
 using AmuletOfNyrac.Maps;
@@ -9,7 +8,6 @@ using AmuletOfNyrac.Themes;
 using SadConsole;
 using SadConsole.Components;
 using SadRogue.Primitives;
-using StatusPanel = AmuletOfNyrac.Screens.Surfaces.StatusPanel;
 
 namespace AmuletOfNyrac.Screens;
 

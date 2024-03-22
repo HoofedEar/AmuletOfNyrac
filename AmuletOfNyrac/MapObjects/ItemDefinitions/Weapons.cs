@@ -1,7 +1,6 @@
 using AmuletOfNyrac.MapObjects.Components.Items;
 using AmuletOfNyrac.MapObjects.Components.Items.Weapon;
 using AmuletOfNyrac.Maps;
-using AmuletOfNyrac.MapObjects.Components.Items.Armor;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 
@@ -115,12 +114,12 @@ internal static class Weapons
     // ReSharper disable once InconsistentNaming
     public static RogueLikeEntity NGGoldenSword()
     {
-        var e = new RogueLikeEntity(Color.Firebrick, Color.Black, '/', layer: (int) GameMap.Layer.Items)
+        var e = new RogueLikeEntity(Color.Goldenrod, Color.Black, '/', layer: (int) GameMap.Layer.Items)
         {
             Name = "NG Golden Sword"
         };
         e.AllComponents.Add(new WeaponComponent(5, 2));
-        e.AllComponents.Add(new DetailsComponent("Hammer", new[]
+        e.AllComponents.Add(new DetailsComponent("Sword", new[]
         {
             ""
         }));

@@ -2,7 +2,6 @@ using AmuletOfNyrac.MapObjects.Components.Combatant;
 using AmuletOfNyrac.MapObjects.Components.EnemyAI;
 using AmuletOfNyrac.Maps;
 using AmuletOfNyrac.Themes;
-using AmuletOfNyrac.MapObjects.Components;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 

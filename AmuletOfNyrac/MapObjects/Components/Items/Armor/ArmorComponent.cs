@@ -1,5 +1,4 @@
 using AmuletOfNyrac.Themes;
-using AmuletOfNyrac.MapObjects.Components.Items.Weapon;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 

@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using AmuletOfNyrac.MapObjects.Components;
+﻿using AmuletOfNyrac.MapObjects.Components;
 using AmuletOfNyrac.MapObjects.Components.Items.Armor;
 using AmuletOfNyrac.MapObjects.Components.Items.Weapon;
-using AmuletOfNyrac.MapObjects.Components.Items;
 using SadConsole.Input;
 using SadConsole.UI.Controls;
 using SadRogue.Integration;

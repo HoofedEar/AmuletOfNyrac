@@ -1,5 +1,4 @@
 using AmuletOfNyrac.MapObjects.Components.Items.Interfaces;
-using SadRogue.Integration;
 
 namespace AmuletOfNyrac.MapObjects.Components.Items.Armor;
 

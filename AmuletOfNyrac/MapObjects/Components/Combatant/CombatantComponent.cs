@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using AmuletOfNyrac.MapObjects.Components.EnemyAI;
 using AmuletOfNyrac.MapObjects.Components.Interfaces;
 using AmuletOfNyrac.Themes;
